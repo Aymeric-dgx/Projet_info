@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 int main(int argc, char* argv[]) {
-kjgvhv
+    
     // Initialisation du SDL
     SDL_Init(SDL_INIT_EVERYTHING);
 
