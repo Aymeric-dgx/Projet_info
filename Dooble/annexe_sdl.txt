@@ -1,1 +1,0 @@
-- Chaque fenetre doit avoir son propre renderer pour pouvoir etre modifier (nb : on peut malgré tout afficher une fenetre sans déclarer de renderer, mais elle sera sans rien)
