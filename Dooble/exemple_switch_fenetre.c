@@ -50,6 +50,7 @@ int main(int argc, char* argv[]) {
     SDL_Event event;
     while (running) {
         while (SDL_PollEvent(&event)) {
+            // Gestion des évenements
             if (event.type == SDL_QUIT) {
                 running = 0;
             }
@@ -70,6 +71,7 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+        
         // Debut affichage dynamique
         SDL_RenderPresent(renderer1);
 
