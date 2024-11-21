@@ -10,4 +10,4 @@ SDL_CreateWindow( nom fenetre,
 
 SDL_CreateRenderer(  nom fenetre sur laquelle il va travailler,
                      index pilote rendu            -> -1 pour laisser l'OS choisir le meilleur
-                     les flags/options de rendu    -> 
+                     les flags/options de rendu    -> SDL_RENDERER_ACCELERATED pour utliser le GPU (+ rapide)
