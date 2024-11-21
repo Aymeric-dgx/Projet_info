@@ -7,6 +7,8 @@
 // Chaque fenetre doit avoir son propre renderer (= moteur de rendu) pour pouvoir y afficher des choses
 // Nb : une fenetre peut malgré tout être afficher sans renderer, mais alors il n'y aura rien
 
+// Toujours faire un SDL_RenderPresent(renderer1); dans la boucle principale pour actualiser en permanence la fenetre et conserver les données associés.
+
 SDL_Init(SDL_INIT_EVERYTHING);    // Permet d'initialiser tout le SDL
 
 SDL_DisplayMode screen;          // Structure permettant de stocker des données sur un écran, notamment height (.h) et width (.w)
@@ -32,4 +34,6 @@ SDL_Event event;      // Structure permettant de stocker des informations sur le
 SDL_PollEvent(&event) // Vérifie si evenement en attente. Si oui, il est retiré de file d'attente et stocké dans event. Retourne 1 si un événement a été récupéré, ou 0 sinon
 event.key.keysym.sym  // permet d'identifier la touche spécifique qui a été pressée ou relâchée lors d'un événement clavier
 
-  
+SDL_DestroyRenderer(renderer1);  // Permet de détruire proprement un renderer (faire de préférence avant de détruire la fenetre associé)
+SDL_DestroyWindow(window1);     // Permet de détruire proprement une fenetre (faire de préférence apres avoir détruit le renderer associé)
+SDL_Quit();                      // Permet de quitter proprement SDL
