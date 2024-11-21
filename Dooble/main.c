@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
     // Obtention de la taille de l'écran + affectation à des varaiables
     SDL_DisplayMode screen;
     SDL_GetCurrentDisplayMode(0, &screen);
-    int screen_height = screen.h;   fsessfesefesffesfesfe
+    int screen_height = screen.h;
     int screen_width = screen.w;
 
     //Création de la fenêtre et du renderer (= moteur de rendu)  (nb : on peut créer plusieurs renderer si on souhaite)
