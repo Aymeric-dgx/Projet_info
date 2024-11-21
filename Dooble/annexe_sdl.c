@@ -1,3 +1,8 @@
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+#include <stdio.h>
+
+
 - Chaque fenetre doit avoir son propre renderer pour pouvoir etre modifier (nb : on peut malgré tout afficher une fenetre sans déclarer de renderer, mais elle sera sans rien)
 - Un renderer est ce qui va permettre d'afficher des trucs sur la fenêtres
 
