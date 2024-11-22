@@ -7,16 +7,16 @@
 // Chaque fenetre doit avoir son propre renderer (= moteur de rendu) pour pouvoir y afficher des choses
 // Nb : une fenetre peut malgré tout être afficher sans renderer, mais alors il n'y aura rien
 
-// Toujours faire un SDL_RenderPresent(renderer1); dans la boucle principale pour actualiser en permanence la fenetre et conserver les données associés.
+// Toujours faire un SDL_RenderPresent(renderer1); dans la boucle principale pour actualiser en permanence la fenetre et re-actualisé les données associés.
 
 SDL_Init(SDL_INIT_EVERYTHING);    // Permet d'initialiser tout le SDL
 
-SDL_DisplayMode screen;          // Structure permettant de stocker des données sur un écran, notamment height (.h) et width (.w)
+SDL_DisplayMode screen;          // Structure permettant de stocker les données d'un écran, notamment height (.h) et width (.w)
 SDL_GetCurrentDisplayMode(0, &screen);  // Permet de récuperer les infos de l'écran (indice 0 -> l'écran princiale) et les stocker dans la structure screen
 
 SDL_Window* window1      // Strucuture permmettant de stocker des infos pour une fenetre 
 SDL_CreateWindow(   "Dooble",                  // Titre
-                    SDL_WINDOWPOS_UNDEFINED,   // Position fenetre en x (ici pas défini -> le OS va choisir la meilleur postion
+                    SDL_WINDOWPOS_UNDEFINED,   // Position fenetre en x (ici pas défini -> le OS va choisir la meilleur postion)
                     SDL_WINDOWPOS_UNDEFINED,   // Idem pour y
                     400, 400,                  // width et height de la fenetre
                     SDL_WINDOW_SHOWN);         // Les flags (option de la fenetre) : FULLSCRENN, HIDDEN, SHOWN, RESIZABLE...
@@ -24,8 +24,8 @@ SDL_CreateWindow(   "Dooble",                  // Titre
 SDL_GetWindowFlags(window1);     // Récupere le flag de la fenetre -> peut etre utile pour verifier si une fenetre est montrée (SDL_WINDOW_SHOWN) ou caché (SDL_WINDOW_HIDDEN)
 // Atention c'est un peu particulier : GetWindowFlags renvoie un masque de bits (= une "liste" de bits, par exemple 0001011) et il faut le comparerer avec les differents
 // flags (SHOWN, HIDDEN, ...) qui ont eux aussi un masque de bits   -> on fait un ET logique (&) entre ces deux masques la 
-// Forme    ->    if (SDL_GetWindowFlags(window1) & SDL_WINDOW_SHOWN) {    
-//                    bla bla};
+// Forme  ->  if (SDL_GetWindowFlags(window1) & SDL_WINDOW_SHOWN) {    
+//                  bla bla};
 
 SDL_Renderer* renderer1    //Structure permettant de stocker des infos pour un renderer (= moteur de rendu), qui va permettre de faire un affichage sur une fenetre
 SDL_CreateRenderer(window1,                   // Nom de la fenetre sur laquelle il va travailler
@@ -33,12 +33,12 @@ SDL_CreateRenderer(window1,                   // Nom de la fenetre sur laquelle 
                   SDL_RENDERER_ACCELERATED);  // Les flags (options), ici permet d'utiliser le GPU afin d'avoir un rendu plus rapide 
 
 SDL_SetRenderDrawColor(renderer1, 255, 0, 255, 255); // Définit couleur que va utiliser le renderer, avec en parametre le renderer, couleurs RGD + a (=transparence ?)
-SDL_RenderClear(renderer1);       // Colorie tout les pixels de la fenetre dont s'occupe le renderer en parametre MAIS n'actualise pas la fenetre
-SDL_RenderPresent(renderer1);     // Mets a jour la fenetre du renderer afin de pouvoir afficher les modifications faites sur cette dernieree
+SDL_RenderClear(renderer1);       // Colorie tout les pixels de la fenetre dont s'occupe le renderer en parametre MAIS n'actualise pas "visuellelement" la fenetre
+SDL_RenderPresent(renderer1);     // Mets a jour la fenetre du renderer afin de pouvoir afficher les modifications faites sur cette derniere
 
 SDL_Rect* rect;     // Strucure permettant de stocker des infos pour un rectangle, .x .y .w et .h
-SDL_RenderDrawRect(renderer, &rect);   // Désine coutour du rectangle (largeur 1 piel) avec la couleur du renderer.  Nb : on peut ppas modifier la largeur -> pas très utile ?
-SDL_RenderFillRect(renderer, &rect);   // Rempli le rectangel avec la couleur du renderer
+SDL_RenderDrawRect(renderer, &rect);   // Déssine coutour du rectangle (largeur 1 pixel) avec la couleur du renderer. (on peut pas modifier la largeur -> pas très utile ?)
+SDL_RenderFillRect(renderer, &rect);   // Rempli le rectangle avec la couleur du renderer
 // Pour faire des contours plus épais, écrire une foncton qui va dessiner plusieurs petits rectangele sur les contours d'un plus grand
 
 SDL_Event event;      // Structure permettant de stocker des informations sur les événements dans SDL (entrées clavier, mouvements de souris,événements de fenêtre, ...)
