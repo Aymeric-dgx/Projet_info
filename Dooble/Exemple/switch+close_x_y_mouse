@@ -3,6 +3,8 @@
 // Quand on switch pour cacher F1 et montrer F2, si on clique dans la zone ou il y avait le recantgel le programme se ferme
 // Faire condition pour verifier le x et y de la souris MAIS AUSSI verifier que la bonne fenetre est ouverte
 
+// Sol° -> Utiliser SDL_GetWindowFlags(window) -> récupere le flag (=option) de la fenetre, qu'on pourra vérifier si = à SDL_WINDOW_SHOWN ou = à SDL_WINDOW_HIDDEN
+
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <stdio.h>
