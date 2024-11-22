@@ -23,7 +23,7 @@ SDL_CreateWindow(   "Dooble",                  // Titre
 
 SDL_GetWindowFlags(window1);     // Récupere le flag de la fenetre -> peut etre utile pour verifier si une fenetre est montrée (SDL_WINDOW_SHOWN) ou caché (SDL_WINDOW_HIDDEN)
 // Atention c'est un peu particulier : GetWindowFlags renvoie un masque de bits (= une "liste" de bits, par exemple 0001011) et il faut le comparerer avec les differents
-// flags (SHOWN, HIDDEN, ...) qui ont eux aussi un masque de bits   -> on fait un ET logique entre ces deux masques la 
+// flags (SHOWN, HIDDEN, ...) qui ont eux aussi un masque de bits   -> on fait un ET logique (&) entre ces deux masques la 
 // Forme    ->    if (SDL_GetWindowFlags(window1) & SDL_WINDOW_SHOWN) {    
 //                    bla bla};
 
