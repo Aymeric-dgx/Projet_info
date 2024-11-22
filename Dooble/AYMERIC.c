@@ -2,6 +2,9 @@
 #include <SDL.h>
 #include <stdio.h>
 
+// Aymeric : J'ai testé mais j'ai l'impression que ça marche pas (j'ai pas pu encore regarder je ferai ça plus tard)
+// Juste savoir si t'a déjà tester et c est bon ou pas ?
+
 // Fonction pour verifier que la bonne fenetre est en ava,t et que toute les autres sont cachées
 // Il est nécessaire de créer un tableau avec toutes les fentre pour utiliser cette fonction
 int verif_showed_window(SDL_Window* window_showed, SDL_Window* windows[], int tab_size) {
