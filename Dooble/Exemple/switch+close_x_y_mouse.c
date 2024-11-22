@@ -92,6 +92,8 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderDrawRect(renderer, &rect);
         SDL_RenderFillRect(renderer, &rect);
+
+        // Mise à jour fenetre
         SDL_RenderPresent(renderer);
     }
 
