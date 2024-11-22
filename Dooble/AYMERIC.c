@@ -2,7 +2,25 @@
 #include <SDL.h>
 #include <stdio.h>
 
-int main(int argc, char* argv[]) {
+// Fonction pour verifier que la bonne fenetre est en ava,t et que toute les autres sont cachées
+// Il est nécessaire de créer un tableau avec toutes les fentre pour utiliser cette fonction
+int verif_showed_window(SDL_Window* window_showed, SDL_Window* windows[], int tab_size) {
+    int comp_hidden_window = 0;
+    if (SDL_GetWindowFlags(window_showed) & SDL_WINDOW_SHOWN) {
+        for (int i=0; i < tab_size; i++) {
+            if (SDL_GetWindowFlags(windows[i]) & SDL_WINDOW_HIDDEN) {
+                comp_hidden_window+=1;
+            }
+        }
+    }
+    if (comp_hidden_window==tab_size-1) {
+        return 1;
+    }
+    return 0;
+}
+
+
+int main2(int argc, char* argv[]) {
 
     // Initialisation du SDL
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -32,6 +50,10 @@ int main(int argc, char* argv[]) {
     SDL_Renderer* renderer1 = SDL_CreateRenderer(window1, -1, SDL_RENDERER_ACCELERATED);
     SDL_Renderer* renderer2 = SDL_CreateRenderer(window2, -1, SDL_RENDERER_ACCELERATED);
     SDL_Renderer* renderer3 = SDL_CreateRenderer(window3, -1, SDL_RENDERER_ACCELERATED);
+
+    //tableau des fenetres et sa taille
+    SDL_Window* tab_windows[3] = {window1, window2, window3};
+    int tab_size = 3;
 
 
 
@@ -77,7 +99,7 @@ int main(int argc, char* argv[]) {
                 SDL_GetMouseState(&x, &y);
                 printf("Coordonnees du clic : %d %d\n", x, y);
                 if (x>rect.x  &&  x<rect.x+rect.w  &&  y>rect.y  &&  y<rect.y+rect.h) {
-                    if (SDL_GetWindowFlags(window1) & SDL_WINDOW_SHOWN  &&  SDL_GetWindowFlags(window2) & SDL_WINDOW_HIDDEN  &&  SDL_GetWindowFlags(window3) & SDL_WINDOW_HIDDEN) {  // Faire une fonction qui retournerai 1 si la bonne fenetre est montré et toute les autres sont caché ?
+                    if (verif_showed_window(window1, tab_windows, tab_size) == 1) {  //Fonction faites tout au debut
                         running = 0;
                     }
                 }
