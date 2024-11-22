@@ -54,11 +54,13 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // Début affichage
+        // Recoloration des fenetre
         SDL_SetRenderDrawColor(renderer1, 0, 0, 255, 255);
         SDL_SetRenderDrawColor(renderer2, 255,0,0,255);
         SDL_RenderClear(renderer1);
         SDL_RenderClear(renderer2);
+
+        // Mise à jour des fenetres
         SDL_RenderPresent(renderer1);
         SDL_RenderPresent(renderer2);
 
