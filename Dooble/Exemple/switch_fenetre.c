@@ -1,6 +1,5 @@
 // Pour switcher, taper barre espace
 
-
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <stdio.h>
@@ -11,36 +10,19 @@ int main(int argc, char* argv[]) {
     // Initialisation du SDL
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    // Récupération de la taille de l'écran
-    SDL_DisplayMode screen;
-    SDL_GetCurrentDisplayMode(0, &screen);
-    int screen_width = screen.w;
-    int screen_height = screen.h;
-
     // Création fenetre + renderer
-    SDL_Window* window1 = SDL_CreateWindow(   "Dooble",
+    SDL_Window* window1 = SDL_CreateWindow( "Dooble",
                         SDL_WINDOWPOS_UNDEFINED,
                         SDL_WINDOWPOS_UNDEFINED,
                         400, 400,
                         SDL_WINDOW_SHOWN);
-    SDL_Window* window2 = SDL_CreateWindow(   "test",
+    SDL_Window* window2 = SDL_CreateWindow( "test",
                         SDL_WINDOWPOS_UNDEFINED,
                         SDL_WINDOWPOS_UNDEFINED,
                         800, 200,
                         SDL_WINDOW_HIDDEN);
     SDL_Renderer* renderer1 = SDL_CreateRenderer(window1, -1, SDL_RENDERER_ACCELERATED);
     SDL_Renderer* renderer2 = SDL_CreateRenderer(window2, -1, SDL_RENDERER_ACCELERATED);
-
-    // Début mise en forme initiale des fenetres
-    SDL_SetRenderDrawColor(renderer1, 255, 0, 255, 255);
-    SDL_RenderClear(renderer1);
-    SDL_RenderPresent(renderer1);
-
-    // Création d un carré
-    SDL_Rect rect = {100, 100, 200, 200};
-    SDL_SetRenderDrawColor(renderer1, 0, 0, 255, 255);
-    SDL_RenderFillRect(renderer1, &rect);
-
 
 
 
@@ -71,9 +53,14 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
-        
-        // Debut affichage dynamique
+
+        // Début affichage
+        SDL_SetRenderDrawColor(renderer1, 0, 0, 255, 255);
+        SDL_SetRenderDrawColor(renderer2, 255,0,0,255);
+        SDL_RenderClear(renderer1);
+        SDL_RenderClear(renderer2);
         SDL_RenderPresent(renderer1);
+        SDL_RenderPresent(renderer2);
 
     }
 
