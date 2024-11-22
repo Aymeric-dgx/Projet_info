@@ -4,6 +4,8 @@
 // Faire condition pour verifier le x et y de la souris MAIS AUSSI verifier que la bonne fenetre est ouverte
 
 // Sol° -> Utiliser SDL_GetWindowFlags(window) -> récupere le flag (=option) de la fenetre, qu'on pourra vérifier si = à SDL_WINDOW_SHOWN ou = à SDL_WINDOW_HIDDEN
+// Attention : SDL_GetWindowFlags renvoie un masque (= liste) de bits, on peu pas comparer directement SDL_GetWindowFlags == SDL_WINDOW_SHOWN
+// Il faut faire un ET logique (&) pour comparer les deux masques
 
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
