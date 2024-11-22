@@ -30,6 +30,11 @@ SDL_SetRenderDrawColor(renderer1, 255, 0, 255, 255); // Définit couleur que va 
 SDL_RenderClear(renderer1);       // Colorie tout les pixels de la fenetre dont s'occupe le renderer en parametre MAIS n'actualise pas la fenetre
 SDL_RenderPresent(renderer1);     // Mets a jour la fenetre du renderer afin de pouvoir afficher les modifications faites sur cette dernieree
 
+SDL_Rect* rect;     // Strucure permettant de stocker des infos pour un rectangle, .x .y .w et .h
+SDL_RenderDrawRect(renderer, &rect);   // Désine coutour du rectangle (largeur 1 piel) avec la couleur du renderer.  Nb : on peut ppas modifier la largeur -> pas très utile ?
+SDL_RenderFillRect(renderer, &rect);   // Rempli le rectangel avec la couleur du renderer
+// Pour faire des contours plus épais, écrire une foncton qui va dessiner plusieurs petits rectangele sur les contours d'un plus grand
+
 SDL_Event event;      // Structure permettant de stocker des informations sur les événements dans SDL (entrées clavier, mouvements de souris,événements de fenêtre, ...)
 SDL_PollEvent(&event) // Vérifie si evenement en attente. Si oui, il est retiré de file d'attente et stocké dans event. Retourne 1 si un événement a été récupéré, ou 0 sinon
 event.key.keysym.sym  // permet d'identifier la touche spécifique qui a été pressée ou relâchée lors d'un événement clavier
