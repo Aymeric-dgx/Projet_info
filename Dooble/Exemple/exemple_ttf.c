@@ -22,7 +22,7 @@ int main() {
 
     // Charger la police
     TTF_Font* bigFont = TTF_OpenFont("../police/arial.ttf", 64); // Police grande taille
-    TTF_Font* smallFont = TTF_OpenFont("../police/arial.ttf", 32); // Police petite taille    (a ?)
+    TTF_Font* smallFont = TTF_OpenFont("../police/arial.ttf", 32); // Police petite taille
 
     // Texte "Bienvenue"
     SDL_Color textColor = {255, 255, 255, 255};
