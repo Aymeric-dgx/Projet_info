@@ -21,6 +21,12 @@ SDL_CreateWindow(   "Dooble",                  // Titre
                     400, 400,                  // width et height de la fenetre
                     SDL_WINDOW_SHOWN);         // Les flags (option de la fenetre) : FULLSCRENN, HIDDEN, SHOWN, RESIZABLE...
 
+SDL_GetWindowFlags(window1);     // Récupere le flag de la fenetre -> peut etre utile pour verifier si une fenetre est montrée (SDL_WINDOW_SHOWN) ou caché (SDL_WINDOW_HIDDEN)
+// Atention c'est un peu particulier : GetWindowFlags renvoie un masque de bits (= une "liste" de bits, par exemple 0001011) et il faut le comparerer avec les differents
+// flags (SHOWN, HIDDEN, ...) qui ont eux aussi un masque de bits   -> on fait un ET logique entre ces deux masques la 
+// Forme    ->    if (SDL_GetWindowFlags(window1) & SDL_WINDOW_SHOWN) {    
+//                    bla bla};
+
 SDL_Renderer* renderer1    //Structure permettant de stocker des infos pour un renderer (= moteur de rendu), qui va permettre de faire un affichage sur une fenetre
 SDL_CreateRenderer(window1,                   // Nom de la fenetre sur laquelle il va travailler
                   -1,                         // Index du pilote de rendu à utiliser, mettre -1 pour laisser le OS choisir le meilleur
