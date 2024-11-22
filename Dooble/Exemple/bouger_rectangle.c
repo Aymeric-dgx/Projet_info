@@ -22,11 +22,7 @@ int main(int argc, char* argv[]) {
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 
-    //Début mise en forme initial des fenêtres
-
-    // Set up fond en bleu
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);   // Fixe la couleur qui va être utlisié par ce renderer (pour modifier refaire un SetRenderDrawColor)
-    SDL_RenderClear(renderer);                                  //  Efface la cible de rendu actuelle avec la couleur de dessin définie
+    //Début création des différents strucures
 
     // Création d'un rectangle
     SDL_Rect rect;
