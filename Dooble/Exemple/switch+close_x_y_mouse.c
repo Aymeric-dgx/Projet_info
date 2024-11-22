@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
                 int x, y;
                 SDL_GetMouseState(&x, &y);
                 printf("Coordonnees du clic : %d %d\n", x, y);
-                if (x>rect.x  &&  x<rect.x+rect.w  &&  y>rect.y  &&  y<rect.y+rect.h) {
+                if (x>rect.x  &&  x<rect.x+rect.w  &&  y>rect.y  &&  y<rect.y+rect.h && (SDL_GetWindowFlags(window1) & SDL_WINDOW_SHOWN) ) {    // () pas obligatoire, juste visuel
                     running = 0;
                 }
             }
