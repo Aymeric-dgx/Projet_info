@@ -41,6 +41,9 @@ SDL_RenderDrawRect(renderer, &rect);   // Déssine coutour du rectangle (largeur
 SDL_RenderFillRect(renderer, &rect);   // Rempli le rectangle avec la couleur du renderer
 // Pour faire des contours plus épais, écrire une foncton qui va dessiner plusieurs petits rectangele sur les contours d'un plus grand
 
+TTF_Font* bigFont  // Structure permettant de stocker des infos pour des polices TTF 
+TTF_OpenFont("../police/arial.ttf", 64)  // Utilisé pour charger une police TTF à partir d'un fichier, avec en parametres : chemin d'accès a la police, taille de la police
+
 SDL_Event event;      // Structure permettant de stocker des informations sur les événements dans SDL (entrées clavier, mouvements de souris,événements de fenêtre, ...)
 SDL_PollEvent(&event) // Vérifie si evenement en attente. Si oui, il est retiré de file d'attente et stocké dans event. Retourne 1 si un événement a été récupéré, ou 0 sinon
 event.key.keysym.sym  // permet d'identifier la touche spécifique qui a été pressée ou relâchée lors d'un événement clavier
