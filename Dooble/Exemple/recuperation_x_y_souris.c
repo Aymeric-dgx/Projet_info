@@ -1,5 +1,7 @@
 // Si clique dans rectange, arrete le programme
 
+// On peut aussi utiliser (si event est un SDL_MOUSEBUTTONDOWN ?) (à vérifier ?) : int mouseX = event.button.x, mouseY = event.button.y;
+
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <stdio.h>
