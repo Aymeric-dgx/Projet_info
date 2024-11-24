@@ -4,10 +4,26 @@
 #include <unistd.h>
 #include <SDl_ttf.h>
 
+// Au moment de la déclaration de variable, on peut mettre const avant pour préciser que ces variables ne peuvent pas etre modifié
+
 // Chaque fenetre doit avoir son propre renderer (= moteur de rendu) pour pouvoir y afficher des choses
 // Nb : une fenetre peut malgré tout être afficher sans renderer, mais alors il n'y aura rien
 
 // Toujours faire un SDL_RenderPresent(renderer1); dans la boucle principale pour actualiser en permanence la fenetre et re-actualisé les données associés.
+
+// Nb pour strucutre :  Utiliser ->w avec un pointeur vers une structure est équivalent à utiliser .w avec une structure directe. La différence principale est 
+// que -> est utilisé pour accéder aux membres d'une structure via un pointeur, tandis que . est utilisé pour accéder aux membres d'une structure directement.
+// Exemple : 
+/*Avec un pointeur :
+SDL_Surface* titleSurface = TTF_RenderText_Solid(bigFont, "Bienvenue", textColor);
+int largeur = titleSurface->w; // Utilise -> pour accéder à la largeur via un pointeur
+
+Sans pointeur :
+SDL_Surface titleSurface;
+int largeur = titleSurface.w; // Utilise . pour accéder à la largeur directement 
+*/
+
+// On peut écrire un if sans les { } si il ne contient qu'une instruction, par exemple : if (event.type == SDL_QUIT) running = 0;
 
 SDL_Init(SDL_INIT_EVERYTHING);    // Permet d'initialiser tout le SDL
 
@@ -40,9 +56,17 @@ SDL_Rect* rect;     // Strucure permettant de stocker des infos pour un rectangl
 SDL_RenderDrawRect(renderer, &rect);   // Déssine coutour du rectangle (largeur 1 pixel) avec la couleur du renderer. (on peut pas modifier la largeur -> pas très utile ?)
 SDL_RenderFillRect(renderer, &rect);   // Rempli le rectangle avec la couleur du renderer
 // Pour faire des contours plus épais, écrire une foncton qui va dessiner plusieurs petits rectangele sur les contours d'un plus grand
+SDL_Rect buttons[3];  // Créer un tableau buttons de 3 structure SDL_Rect (= créer un tableau contenant 3 rectangles)
+
 
 TTF_Font* bigFont  // Structure permettant de stocker des infos pour des polices TTF 
-TTF_OpenFont("../police/arial.ttf", 64)  // Utilisé pour charger une police TTF à partir d'un fichier, avec en parametres : chemin d'accès a la police, taille de la police
+TTF_OpenFont("../police/arial.ttf", 64)  // Utilisé pour charger une police TTF à partir d'un fichier : chemin d'accès a la police, taille de la police
+SDL_Color textColor    // Strucutre permettant de stocker des infos pour une couleur : .r (red), .g (green), .b (blue), .a (alpha = oppacité)
+SDL_Surface* titleSurface    // Représente une image en mémoire, par exemmple : chargement d'image depuis un path, affichage d'un texte, manipulation de pixels, (blitting ?)
+TTF_RenderText_Solid(bigFont, "Bienvenue", textColor);    // Return du texte en utilisant : police, texte, couleur du texte
+SDL_Texture* titleTexture  // Used to represent image, but + fast que SDL_Surface (directement utilisé par GPU), utilisé pour : rendu sur écran, performances, manip d'images
+SDL_CreateTextureFromSurface(renderer, titleSurface);  // Convertit surface en texture pour rendu + rapide (GPU) : renderer avec qui travailler, surface qu'on veut convertir
+SDL_FreeSurface(titleSurface);  // Free la mémoire alloué à une surface (à libérer par exemple après avoir créer une texture via cette surface, et dont on a donc + besoin) 
 
 SDL_Event event;      // Structure permettant de stocker des informations sur les événements dans SDL (entrées clavier, mouvements de souris,événements de fenêtre, ...)
 SDL_PollEvent(&event) // Vérifie si evenement en attente. Si oui, il est retiré de file d'attente et stocké dans event. Retourne 1 si un événement a été récupéré, ou 0 sinon
