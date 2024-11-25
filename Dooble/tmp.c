@@ -1,3 +1,6 @@
+// Note Aymeric : si on clique dans la zone du quitter mais sur une autre fenetre, le programme considère quand meme qu'on a cliqué sur quitter et ferme le programme
+// Faire la vérification des fenetre montrées/cachées
+
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -42,10 +45,10 @@ int main() {
         SDL_Surface* buttonSurface = TTF_RenderText_Solid(smallFont, buttonLabels[i], buttonTextColor);
         buttonTextures[i] = SDL_CreateTextureFromSurface(renderer_menu, buttonSurface);
 
-        buttons[i].w = 500; // Largeur du bouton (texte + padding)
-        buttons[i].h = 150; // Hauteur du bouton (texte + padding)
+        buttons[i].w = screen_width / 3; // Largeur du bouton (texte + padding)
+        buttons[i].h = screen_height / 6.5; // Hauteur du bouton (texte + padding)
         buttons[i].x = screen_width / 2 - buttons[i].w / 2;
-        buttons[i].y = screen_height / 2 + buttons[i].h * i - buttons[i].h / 1.5 + 20*i - 100; // Espacement vertical entre les boutons
+        buttons[i].y = screen_height / 2 + buttons[i].h * i - buttons[i].h / 1.5 + (screen_height/40) * i - screen_height/15; // Espacement vertical entre les boutons
 
         // Calcul de la position du texte
         buttonTextRects[i].w = buttonSurface->w;
