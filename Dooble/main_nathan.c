@@ -1,4 +1,5 @@
-// Note Aymeric : si on clique dans la zone du quitte mais sur une autre fenetre, le programme considère quand meme qu'on a cliqué sur quiiter et ferme le programme
+// Note Aymeric : si on clique dans la zone du quitter mais sur une autre fenetre, le programme considère quand meme qu'on a cliqué sur quitter et ferme le programme
+// Faire la vérification des fenetre montrées/cachées
 
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
