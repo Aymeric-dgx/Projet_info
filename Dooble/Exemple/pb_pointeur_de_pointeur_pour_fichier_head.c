@@ -1,16 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+// Déclare une structure Test contenant deux variables entières a et b.
 struct Test {
     int a;
     int b;
 };
 
+
+// Déclare une autre structure Test2 contenant également deux variables entières a et b.
 struct Test2 {
     int a;
     int b;
 };
 
+
+// void** test() retourne un tableau de pointeur (d'où les ->w au lieu de .w dans le main)
 void** test() {
     struct Test* tmp = malloc(sizeof(struct Test));
     struct Test2* tmp2 = malloc(sizeof(struct Test2));
