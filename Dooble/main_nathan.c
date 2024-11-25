@@ -1,3 +1,5 @@
+// Note Aymeric : si on clique dans la zone du quitte mais sur une autre fenetre, le programme considère quand meme qu'on a cliqué sur quiiter et ferme le programme
+
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_ttf.h>
