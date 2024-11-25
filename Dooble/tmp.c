@@ -25,7 +25,7 @@ int main() {
 
     // Charger la police
     TTF_Font* bigFont = TTF_OpenFont("../police/arial.ttf", 128); // Police grande taille
-    TTF_Font* smallFont = TTF_OpenFont("../police/arial.ttf", 96); // Police petite taille
+    TTF_Font* smallFont = TTF_OpenFont("../police/arial.ttf", (screen_width / 450) * 24); // Police petite taille
 
     // Texte "Dooble"
     SDL_Color textColor = {255, 255, 255, 255};
