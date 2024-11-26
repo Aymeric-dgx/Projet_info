@@ -6,6 +6,11 @@
 // Dynamiquement : Les données peuvent exister au-delà de la portée de la fonction qui les a créées. Elles ne sont libérées que lorsqu'on appele free.
 // Statiquement : Les données sont détruites à la fin de la fonction qui les a créées.
 
+// On va créer un void tableau de pointeurs qui vont pointer vers chaque strucutre différente
+// Si on avait simplement fait un tableau de strcuture, on aurait pu avoir des problemes car chaque strucutre prendrait + ou - d escpace --> il faut faire au cas par cas
+// Ainsi en faisant un tableau de pointeurs de strucutre, comme chaque pointeurs à une taille relativement fixe, dans le "gros" save on aura pas de pb de mémoire
+// Et de plus, cela nous permettra d'allouer au cas par cas la mémoire nescessaire, comme ici par exemple :
+// struct Test* tmp = malloc(sizeof(struct Test));
 
 
 struct Test {
