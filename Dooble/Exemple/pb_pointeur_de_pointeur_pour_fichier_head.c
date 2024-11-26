@@ -15,6 +15,7 @@
 
 // NB : malloc retourne un pointeur qui pointe vers un début de bloc mémoire (de la taille qu'on aura définit) et qui peut etre considéré comme un tableau (tant qu'on ne change pas l'adresse qu'il pointe) 
 // Ainsi si on créer un tableau de pointeur avec malloc, il faut mettre (void**) malloc... afin de préciser que malloc n'est pas un pointeur mais un pointeur de pointeur
+
 // Explication + exemple Copilot à la question : 
 /*
 ok donc on fait void** array (void**) malloc(...) parce que comme ça on dit que malloc est un pointeur de pointeur et donc si je fais array[2] l'ordinateur 
@@ -22,7 +23,8 @@ comprendra qu'on pointe vers un pointeur ?
 */
 
 /* 
-Oui, vous avez bien compris le principe général. Utiliser void** array = (void**) malloc(...) permet de dire que array est un pointeur vers un pointeur de type void. Cela signifie que array peut être utilisé comme un tableau de pointeurs de type void*.
+Oui, vous avez bien compris le principe général. Utiliser void** array = (void**) malloc(...) permet de dire que array est un pointeur vers un pointeur de type void. 
+Cela signifie que array peut être utilisé comme un tableau de pointeurs de type void*.
 
 Voici une explication détaillée :
 
