@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Si test est un pointeur vers un structure : test->a = 1    <==>    (*test).a = 1
 
 // Difference entre allouer de la mémoire dynamiquement et statiquement
 // Dynamiquement : Les données peuvent exister au-delà de la portée de la fonction qui les a créées. Elles ne sont libérées que lorsqu'on appele free.
