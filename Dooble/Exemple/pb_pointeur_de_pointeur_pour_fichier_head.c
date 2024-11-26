@@ -3,6 +3,16 @@
 
 // Si test est un pointeur vers un structure : test->a = 1    <==>    (*test).a = 1
 
+// Si je declare une strucuture comme ceci : 
+/*
+typedef struct tmp {    //tmp est le nom de la strucutre
+    int a;
+    int b;
+} second_name;        // second_name est le nom a utiliser si on veut créer la structure sans utiliser struct avant
+*/ 
+// Ainsi : struct tmp Structure1    <==>    second_name tmp Structure1
+
+
 // Difference entre allouer de la mémoire dynamiquement et statiquement
 // Dynamiquement : Les données peuvent exister au-delà de la portée de la fonction qui les a créées. Elles ne sont libérées que lorsqu'on appele free.
 // Statiquement : Les données sont détruites à la fin de la fonction qui les a créées.
