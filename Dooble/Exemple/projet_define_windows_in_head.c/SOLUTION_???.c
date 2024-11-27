@@ -21,7 +21,7 @@ int verif_showed_window(SDL_Window* window_showed, SDL_Window* windows[], int ta
 
 // On doit créer les fenetre et renderer ici car on devra verifier si elle sont ouverte ou non ici  -->  on doit donc les avoir ici
 // Ou sinon
-// On créer des variables globales pour les fenetres et les renderer
+// On créer des variables globales pour les fenetres et les renderer (pointeur ?)
 // Ou encore
 // On créer ici des variable qui valent 1 ou 0 et les fonctions qui créer/modifient les fenetres et les renderer renvoient 1 ou 0
 
@@ -34,7 +34,7 @@ int main() {
     TTF_Init();
 
     int begining = 1;   // Pour "enclencher" les boucles, on dit artificellement que le menu est ouvert afin de lancer la focntion create_menu()
-    int running = 1;    // Mais du coup (pour begining) p
+    int running = 1;    // Mais du coup (pour begining) si on fait des varaibles globales on en aura plus besoin ?
     SDL_Event event;
 
     while (running) {
