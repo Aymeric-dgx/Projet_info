@@ -15,17 +15,17 @@ int main(int argc, char* argv[]){
 
 
     int running = 1;
-    SDL_Event event;
+    SDL_Event event;    // On en pas besoin pour l'instant
 
 
     int nb_window = window_menu(screen_width, screen_height);
 
     while (running) {
         // Gestion des événements
-        if (nb_window == 0) {
+        if (nb_window == 0) {    // Bouton Quitter cliqué --> stopper le programme
             running = 0;
         }
-        else if (nb_window == 1) {
+        else if (nb_window == 1) {    // La fenetre menu est ouverte
             nb_window = window_play(screen_width, screen_height);
             running = 0;
         }
