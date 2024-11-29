@@ -84,3 +84,13 @@ SDL_Log("Bouton 'Jouer' cliqué !") // Ecrit un message de journalisation dans l
 SDL_DestroyRenderer(renderer1);  // Permet de détruire proprement un renderer (faire de préférence avant de détruire la fenetre associé)
 SDL_DestroyWindow(window1);     // Permet de détruire proprement une fenetre (faire de préférence apres avoir détruit le renderer associé)
 SDL_Quit();                      // Permet de quitter proprement SDL
+
+strcat(inputText, event.text.text);  // Concatène (ajouter) le texte saisi par l'utilisateur à la chaîne inputText.
+// event.text.text : Contient le texte saisi par l'utilisateur lors d'un événement de type SDL_TEXTINPUT.
+// strcat(inputText, event.text.text) : Ajoute le texte contenu dans event.text.text à la fin de la chaîne inputText.
+strncpy(savedText, inputText, MAX_TEXT);  // Copier une chaîne de caractères d'une variable à une autre, avec une limite sur le nombre de caractères copiés.
+/* 
+savedText : La destination où la chaîne de caractères sera copiée.
+inputText : La source de la chaîne de caractères à copier.
+MAX_TEXT : Le nombre maximum de caractères à copier.
+*/
