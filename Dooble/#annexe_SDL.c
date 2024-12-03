@@ -63,6 +63,7 @@ TTF_Font* bigFont  // Structure permettant de stocker des infos pour des polices
 TTF_OpenFont("../police/arial.ttf", 64)  // Utilisé pour charger une police TTF à partir d'un fichier : chemin d'accès a la police, taille de la police
 SDL_Color textColor    // Strucutre permettant de stocker des infos pour une couleur : .r (red), .g (green), .b (blue), .a (alpha = oppacité)
 SDL_Surface* titleSurface    // Représente une image en mémoire, par exemmple : chargement d'image depuis un path, affichage d'un texte, manipulation de pixels, (blitting ?)
+// ->w et ->h peuvent etre utiles pour récupérer la largeur et hauteur de la surface
 TTF_RenderText_Solid(bigFont, "Bienvenue", textColor);    // Return du texte en utilisant : police, texte, couleur du texte
 SDL_Texture* titleTexture  // Used to represent image, but + fast que SDL_Surface (directement utilisé par GPU), utilisé pour : rendu sur écran, performances, manip d'images
 SDL_CreateTextureFromSurface(renderer, titleSurface);  // Convertit surface en texture pour rendu + rapide (GPU) : renderer avec qui travailler, surface qu'on veut convertir
