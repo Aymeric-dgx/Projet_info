@@ -85,6 +85,11 @@ SDL_DestroyRenderer(renderer1);  // Permet de détruire proprement un renderer (
 SDL_DestroyWindow(window1);     // Permet de détruire proprement une fenetre (faire de préférence apres avoir détruit le renderer associé)
 SDL_Quit();                      // Permet de quitter proprement SDL
 
+SDL_StartTextInput();  // Commencer à accepter les événements de saisie de texte Unicode dans une fenêtre spécifiée (active SDL_EVENT_TEXT_INPUT et SDL_EVENT_TEXT_EDITING12)
+SDL_StopTextInput();  // Arrêter la reception des évenement de saisie de text
+SDL_EVENT_TEXT_INPUT  // Evenement déclenché lorsque l'utilisateur saisie du texte 
+SDL_EVENT_TEXT_EDITING  // Evenement presque identique à SDL_EVENT_TEXT_INPUT, mais "attend" que l'utilisateur valide l'entrée
+// On va plutôt utilisé SDL_EVENT_TEXT_INPUT, car il est plus simple/clair et on a pas besoin de + pour l'instant
 strcat(inputText, event.text.text);  // Concatène (ajoute) le texte saisi par l'utilisateur à la chaîne inputText.
 // event.text.text : Contient le texte saisi par l'utilisateur lors d'un événement de type SDL_TEXTINPUT.
 // strcat(inputText, event.text.text) : Ajoute le texte contenu dans event.text.text à la fin de la chaîne inputText.
