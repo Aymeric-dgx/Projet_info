@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include "option.h"
 
+// Reste à faire :
+// Afficher en dessous le temps sélectionné + actualisé si il change
+// Pouvoir entrer manuellement (via une zone de texte) le temps désiré : actualisé temps sélectionné + barre de progression
+
 int main() {
     // Initialisation SDL + TTF (à retirer une fois "associé" avec le main, c est juste pour le test)
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -45,6 +49,7 @@ int main() {
                     float f_mouse_x = mouse_x, f_barre_x = barre.x, f_barre_w = barre.w;    // On passe tout en float pour éviter les pb de division entière
                     float tmp = 60 + (f_mouse_x-f_barre_x) / f_barre_w * 120;   // // tps de base + %barre * temps max à ajouter
                     temps = tmp ;   // On passe tmp (float) en int (temps)
+                    printf("temps selectionne : %d\n",temps);
 
                     sub_barre_created = 1;  // On dit qu'on a créer le sub_barre (utile uniquement la première fois)
                     changing_sub_barre = 1; // On dit qu'on a modifé la positon de la barre de progression
