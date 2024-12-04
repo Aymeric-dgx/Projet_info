@@ -79,6 +79,8 @@ SDL_Event event;      // Structure permettant de stocker des informations sur le
 SDL_PollEvent(&event) // Vérifie si evenement en attente. Si oui, il est retiré de file d'attente et stocké dans event. Retourne 1 si un événement a été récupéré, ou 0 sinon
 event.key.keysym.sym  // permet d'identifier la touche spécifique qui a été pressée ou relâchée lors d'un événement clavier
 int mouseX = event.button.x, mouseY = event.button.y; // (à verifier), si event == MOUSEBUTTONDOWN (ou UP), permet de récupérer les coordonnées de la souris
+SDL_GetMouseState(&mouse_x, &mouse_y); // Recupere les coordonées de la sourie et les affectre à 2 variable. Récupère en permanance les coordonées, pas besoin de cliquer avec la souris
+// Pour eviter que juste en passant au dessus d'une zone ça récupère les coordonées (pour par exemple fermé la fenetre), fair un if (event.type == MOUSEBUTTONDOWN)
 
 SDL_Log("Bouton 'Jouer' cliqué !") // Ecrit un message de journalisation dans la console
 
