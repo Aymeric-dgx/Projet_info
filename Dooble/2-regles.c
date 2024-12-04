@@ -12,6 +12,8 @@
                     - Comparé les coordonnées du clic avec le debut de la barre (voir si proche ou eloigné)
                     - Calculer le temps à donner en fonction de sa disatnce avec le début de la barre
                     - Pour que ce soit plus visuel, colorier tout ce qui est à gauche du point cliqué
+                    - Afficher en bas le temps séletionné
+                    (temps entre 60 et 180 sec)
 
     - Mode de jeu : - Faire 2 carré de "sélection" avec écrit à coté le mode de jeu
                     - Quand on clique dans un des 2 carré, il se colorie pour qu on voit quel mode est choisie
@@ -19,3 +21,4 @@
                     - Attention aussi a ce que si on clique sur carré 1 puis sur carré 2, "déselctionner" le carré 1
 
     - Nb de mots :  - A peu près identique à la selection du temps
+*/
