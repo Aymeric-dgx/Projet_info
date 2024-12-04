@@ -27,6 +27,7 @@ int largeur = titleSurface.w; // Utilise . pour accéder à la largeur directeme
 
 sprintf(phrase, "%d", nombre);   // Convertit une entrée en chaine de caractère : tab de caractère où stocker la valeur, type de l'entrée (%d, %f, ...), valeur que l'on veut convertir en char
 // Exemple un peu plus comolexe : sprintf(result, "Name: %s, Age: %d, Height: %.2f", name, age, height);
+num = atoi(str);  // Convertit une chaine de caractere en entier, et renvoie 0 si l'entrée n'est pas un str
 
 SDL_Init(SDL_INIT_EVERYTHING);    // Permet d'initialiser tout le SDL
 
