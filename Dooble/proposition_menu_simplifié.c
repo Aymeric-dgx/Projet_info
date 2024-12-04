@@ -39,20 +39,20 @@ int main() {
     // Création des boutons Play, Score, Quit
     SDL_Color buttonTextColor = {0, 0, 0, 255}; // Noir
     char* buttonNames[3] = {"Play", "Score", "Quit"};   // Pointeur de chaine de caractère
-    SDL_Rect buttonRects[3];    // Tableau des rectangles pour les boutons
-    SDL_Rect textButtonRects[3];    // Tableau des rectanles pour le placement du texte (pour les placer dans les gros rectangles qui feront le fond des boutons)
+    SDL_Rect buttonRects[3];    // Tableau des "gros rectangles" pour les boutons, qui feront le fond des boutons
+    SDL_Rect textButtonRects[3];    // Tableau des rectangles pour le placement du texte (pour les placer dans les gros rectangles)
     SDL_Texture* buttonTextures[3]; // Tableau pour stocker les textures pour les boutons
 
     for(int i=0 ; i<3 ; i++) {
         // Création du texte des boutons
         SDL_Surface* buttonSurface = TTF_RenderText_Solid(smallFont, buttonNames[i], buttonTextColor);  // police, texte, couleur
-        buttonTextures[i] = SDL_CreateTextureFromSurface(renderer_menu, buttonSurface); // renderer(on va dire la fenetre), surface
+        buttonTextures[i] = SDL_CreateTextureFromSurface(renderer_menu, buttonSurface); // renderer, surface
 
         // Placement des boutons (= "gros rectangles")
         buttonRects[i].w = screen.w / 3;
         buttonRects[i].h = screen.h/ 6.5;
         buttonRects[i].x = screen.w/2 - buttonRects[i].w/2;
-        buttonRects[i].y = buttonRects[i].h*3 + i*screen.h/5.5 - screen.h/8;
+        buttonRects[i].y = buttonRects[i].h*3 - screen.h/8 + i*screen.h/5.5;    // Espacement vertical entre chaque boutons
 
         // Placement des "petits rectangle" dans les boutons
         textButtonRects[i].w = buttonSurface->w;
