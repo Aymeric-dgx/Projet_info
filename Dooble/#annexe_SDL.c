@@ -25,6 +25,9 @@ int largeur = titleSurface.w; // Utilise . pour accéder à la largeur directeme
 
 // On peut écrire un if sans les { } si il ne contient qu'une instruction, par exemple : if (event.type == SDL_QUIT) running = 0;
 
+sprintf(phrase, %d, nombre);   // Convertit une entrée en chaine de caractère : tab de caractère où stocker la valeur, type de l'entrée (%d, %f, ...), valeur que l'on veut convertir en char
+// Exemple un peu plus comolexe : sprintf(result, "Name: %s, Age: %d, Height: %.2f", name, age, height);
+
 SDL_Init(SDL_INIT_EVERYTHING);    // Permet d'initialiser tout le SDL
 
 SDL_DisplayMode screen;          // Structure permettant de stocker les données d'un écran, notamment height (.h) et width (.w)
