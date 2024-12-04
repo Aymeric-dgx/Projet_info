@@ -35,7 +35,7 @@ int main() {
     SDL_Rect titleRect = {screen.w/2 - tittleSurface->w/2, screen.h/8 - tittleSurface->h/2.5, tittleSurface->w, tittleSurface->h};
     SDL_FreeSurface(tittleSurface);
 
-    
+
     // Création des boutons Play, Score, Quit
     SDL_Color buttonTextColor = {0, 0, 0, 255}; // Noir
     char* buttonNames[3] = {"Play", "Score", "Quit"};   // Pointeur de chaine de caractère
@@ -79,15 +79,15 @@ int main() {
                 int mouse_x, mouse_y;
                 SDL_GetMouseState(&mouse_x, &mouse_y);
                 if (click_in_rect(mouse_x, mouse_y, buttonRects[0])) {  // Bouton "Play" cliqué
-                    printf("Bouton Play cliqué\n");
+                    printf("Bouton Play clique\n");
                     returning = 1;
                 }
                 else if (click_in_rect(mouse_x, mouse_y, buttonRects[1])) {  // Bouton "Scores" cliqué
-                    printf("Bouton Scores cliqué\n");
+                    printf("Bouton Scores clique\n");
                     returning = 2;
                 }
                 else if (click_in_rect(mouse_x, mouse_y, buttonRects[2])) {  // Bouton "Quitter" cliqué
-                    printf("Bouton Quitter cliqué\n");
+                    printf("Bouton Quitter clique\n");
                     returning = 0;
                     running = 0;
                 }
@@ -112,8 +112,6 @@ int main() {
 
         // Mis à jour de l'écran
         SDL_RenderPresent(renderer_menu);
-
-        printf("Returning = %d\n", returning);
     }
     // Fin boucle principale
 
