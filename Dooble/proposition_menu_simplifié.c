@@ -12,7 +12,6 @@ int main() {
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
 
-
     // Obtenir les dimensions de l'écran (idem, a retirer une fois "associé)
     SDL_DisplayMode screen;
     SDL_GetCurrentDisplayMode(0, &screen);
@@ -36,15 +35,13 @@ int main() {
     SDL_Rect titleRect = {screen.w/2 - tittleSurface->w/2, screen.h/8 - tittleSurface->h/2.5, tittleSurface->w, tittleSurface->h};
     SDL_FreeSurface(tittleSurface);
 
-
-
+    
     // Création des boutons Play, Score, Quit
     SDL_Color buttonTextColor = {0, 0, 0, 255}; // Noir
     char* buttonNames[3] = {"Play", "Score", "Quit"};   // Pointeur de chaine de caractère
     SDL_Rect buttonRects[3];    // Tableau des rectangles pour les boutons
     SDL_Rect textButtonRects[3];    // Tableau des rectanles pour le placement du texte (pour les placer dans les gros rectangles qui feront le fond des boutons)
     SDL_Texture* buttonTextures[3]; // Tableau pour stocker les textures pour les boutons
-
 
     for(int i=0 ; i<3 ; i++) {
         // Création du texte des boutons
@@ -67,12 +64,10 @@ int main() {
     }
 
 
-
     // Boucle principale
     int returning = -1;
     int running = 1;
     SDL_Event event;
-
 
     while(running) {
         // Gestion des événements
@@ -98,6 +93,7 @@ int main() {
                 }
             }
         }
+        // Fin gestion des évements
 
         //Peinture du fond
         SDL_SetRenderDrawColor(renderer_menu,0,0,50,255);
@@ -118,16 +114,13 @@ int main() {
         SDL_RenderPresent(renderer_menu);
 
         printf("Returning = %d\n", returning);
-
-
-
     }
     // Fin boucle principale
+
     if (returning != -1) {
         return returning;
     } else {
         printf("pb avec le returning");
         return -1;
     }
-
 }
