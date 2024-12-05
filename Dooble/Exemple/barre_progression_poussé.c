@@ -9,7 +9,6 @@
 
 // Reste à faire :
 // Pouvoir entrer manuellement (via une zone de texte) le temps désiré : actualisé temps sélectionné + barre de progression
-// Pb zone de saisie : le texte bouge quand on écrit, essayer de "fixer" le point de départ
 
 int main() {
 
@@ -49,6 +48,7 @@ int main() {
     int changing_sub_barre = 0; // Va permettre de dire qu'on a modifié la position de la barre
     int input_box_active = 0;   // Dit si la box de saisie de texte est cliqué ou non
     char input_text[MAX_INPUT_LENGTH] = "";
+    int wrong_nb = 0; // Va permettre de dire si le nombre saisie manuellement est valide ou pas
 
     while(running) {
         // Gestion des évenements
@@ -78,17 +78,25 @@ int main() {
                 }
             }
             else if (event.type == SDL_TEXTINPUT && input_box_active) {
+                if(strlen(input_text)>5) {
+                    input_text[0] = '\0';
+                }
                 if(strlen(input_text)<MAX_INPUT_LENGTH-1) {
                     strcat(input_text, event.text.text);
                 }
+                wrong_nb = 0;
             }
             else if(event.type == SDL_KEYDOWN && input_box_active) {
                 if(event.key.keysym.sym == SDLK_BACKSPACE && strlen(input_text)<0) {
                     input_text[strlen(input_text)-1] = '\0';
                 }
-                else if (event.key.keysym.sym == SDLK_RETURN && strlen(input_text)>0) {
-                    time = atoi(input_text);    // Convertit le str en int
-                    input_text[0] = '\0';
+                else if (event.key.keysym.sym == SDLK_RETURN) {                 // Peut etre ici, avec strlen(input_text)>0
+                    if(atoi(input_text)<60 || atoi(input_text)>180) {
+                        wrong_nb = 1;
+                    } else {
+                        time = atoi(input_text);    // Convertit le str en int
+                        input_text[0] = '\0';
+                    }
                 }
             }
         }
@@ -124,7 +132,6 @@ int main() {
         SDL_Color show_time_color = {0,0,0,255};
         char number[10] = "";
         sprintf(number, "%d", time);
-        printf("%d\n", time);
         strcat(number, " sec");
         SDL_Surface* tmp = TTF_RenderText_Solid(police, number, show_time_color);
         SDL_Texture* show_time = SDL_CreateTextureFromSurface(renderer_regles, tmp);
@@ -134,20 +141,34 @@ int main() {
         SDL_SetRenderDrawColor(renderer_regles,255,255,255,255);
         SDL_RenderFillRect(renderer_regles, &rect_show_time);
         SDL_RenderCopy(renderer_regles, show_time, NULL, &rect_show_time);
+        SDL_DestroyTexture(show_time);
 
 
         // Affichage de la selection manuelle du temps
         SDL_SetRenderDrawColor(renderer_regles,255,255,255,255);
         SDL_RenderDrawRect(renderer_regles, &inputBox);
-        if (strlen(input_text)>0) {
-            // Mise en place du texte dans la box de saisie
-            SDL_Color color_text = {255,255,255,255};
-            SDL_Surface* tmp = TTF_RenderText_Solid(police, input_text, color_text);
-            SDL_Texture* text_box = SDL_CreateTextureFromSurface(renderer_regles, tmp);
-            SDL_Rect rect_text_box = {inputBox.x+tmp->w, inputBox.y+tmp->h/100, tmp->w, tmp->h};
+        SDL_Color color_text = {255,255,255,255};
 
-            // Affichage du texte dans la box de saisie
+        if (strlen(input_text)>0) {
+
+            SDL_Surface* tmp;
+            SDL_Texture* text_box;
+            SDL_Rect rect_text_box;
+
+            if (wrong_nb) {
+                strcpy(input_text, "Entrer un nb entre 60 et 180");
+                tmp = TTF_RenderText_Solid(police, input_text, color_text);
+                text_box = SDL_CreateTextureFromSurface(renderer_regles, tmp);
+                rect_text_box = (SDL_Rect){inputBox.x + inputBox.x / 50, inputBox.y + inputBox.h / 10, tmp->w, tmp->h};
+            } else {
+                tmp = TTF_RenderText_Solid(police, input_text, color_text);
+                text_box = SDL_CreateTextureFromSurface(renderer_regles, tmp);
+                rect_text_box = (SDL_Rect){inputBox.x + inputBox.x / 50, inputBox.y + inputBox.h / 10, tmp->w, tmp->h};
+            }
+
             SDL_RenderCopy(renderer_regles, text_box, NULL, &rect_text_box);
+            SDL_FreeSurface(tmp); // Libération de la surface
+            SDL_DestroyTexture(text_box); // Libération de la texture après utilisation
         }
 
 
