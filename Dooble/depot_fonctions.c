@@ -68,3 +68,33 @@ void maj_progress_bar(SDL_Renderer* renderer, SDL_Rect bar, SDL_Rect sub_bar, SD
     SDL_SetRenderDrawColor (renderer, sub_bar_color.r, sub_bar_color.g, sub_bar_color.b, sub_bar_color.a);
     SDL_RenderFillRect (renderer, &sub_bar);
 }
+
+
+/*Fonction à mettre dans la gestion des evenements "nu", sans condition dans la boucle de gestions des evenemts (verifie lui meme la condtion des evenement)
+Va verifier si le clic est dans la box de saisie, et va modifier un pointeur de str avec les entrées du clavier
+Mise en place néscessaire :
+    - Donner le POINTEUR de l'event qui a été créé dans le main
+    - Donner le POINTEUR de is_active pour "sauvegarder" dans le main si la box de saisie est cliqué ou pas
+    - Donner le POINTEUR (définit avec malloc) de la chaine de caractère à modifier (et non pas un tableau de char car ne peut pas etre return)µ
+            ATTENTION -> initialiser le premier caractere (p_texte[0] = '\0')
+    - Le rect dans lequelle doit etre saise le texte (pour détecter si le clic active ou non la box de saisie)
+ */
+void activate_input_box(SDL_Event* event, int* is_active, char* input_text, SDL_Rect input_box) {
+    if(event->type == SDL_TEXTINPUT && *is_active ==1) {
+        strcat(input_text, event->text.text);
+    }
+    else if(event->type == SDL_MOUSEBUTTONDOWN) {
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        if(click_in_rect(x, y, input_box))  *is_active = 1;
+        else   *is_active = 0;
+    }
+    else if(event->type == SDL_KEYDOWN && *is_active == 1) {
+        if (event->key.keysym.sym == SDLK_BACKSPACE && strlen(input_text)>0) {
+            input_text[ strlen(input_text) - 1] = '0';
+        }
+        else if(event->key.keysym.sym == SDLK_RETURN) {
+            input_text[0] = '0';
+        }
+    }
+}
