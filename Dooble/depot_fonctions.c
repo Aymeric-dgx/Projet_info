@@ -101,6 +101,8 @@ void activate_input_box(SDL_Event* event, int* is_active, char* input_text, SDL_
 
 
 
+// Pour voir comment mettre en place ces fonctions, cf exemple associé dans Exemple / Applications_fonctions
+
 /*
 Fonction à mettre dans la gestion des evenements "nu", sans condition dans la boucle de gestions des evenemts (verifie lui meme la condtion des evenement)
 Va verifier si le clic est dans la box de saisie, et va modifier un pointeur de str avec les entrées du clavier
