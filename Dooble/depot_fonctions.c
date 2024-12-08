@@ -169,10 +169,10 @@ void maj_input_box(SDL_Renderer* renderer, SDL_Rect box, SDL_Rect* text_box, SDL
 
 
 /*
-Fonction qui va permettre de créer et gérer + facilement des boutons :
+Fonction qui va permettre de créer et gérer + facilement des boutons, en affichant le texte au centre :
     - Renderer
-    - Rect pour placer le bouton (créé, placé et dimensionné en ammont)
-    - Rect pour placer le texte (créé et placé en ammont -> dimensions (h et w) faites automatiquement dans la fonction)
+    - Rect pour placer le bouton (créé et placé en ammont)
+    - Rect pour placer le texte (créé en ammont)
     - Le texte à écrire dedans
     - La police
     - Couleur de la police
@@ -186,6 +186,8 @@ void create_button(SDL_Renderer* renderer, SDL_Rect button_rect, SDL_Rect text_r
     SDL_Surface* tmp_surface = TTF_RenderText_Solid(font, text, font_color);
     SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, tmp_surface);
 
+    text_rect.x = button_rect.x + button_rect.w/2 - tmp_surface->w/2;
+    text_rect.y = button_rect.y + button_rect.h/2 - tmp_surface->h/2;
     text_rect.w = tmp_surface->w;
     text_rect.h = tmp_surface->h;
 
