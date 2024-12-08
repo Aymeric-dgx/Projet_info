@@ -33,7 +33,7 @@ int main() {
             }
         }
         SDL_Rect button_rect = {100,100,800,500};
-        SDL_Rect text_rect = {200,200};
+        SDL_Rect text_rect;
         SDL_Color font_color = {255,255,0,255};
         SDL_Color button_rect_color = {0,255,255,255};
         create_button(renderer, button_rect, text_rect, "Hello test", font, font_color, button_rect_color);
