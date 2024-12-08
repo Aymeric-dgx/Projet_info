@@ -27,8 +27,16 @@ int main() {
     TTF_Font* bigFont = TTF_OpenFont("../police/arial.ttf", (screen.w / 250) * 24); // Police grande taille
     TTF_Font* smallFont = TTF_OpenFont("../police/arial.ttf", (screen.w / 450) * 24); // Police petite taille
 
-    // Création des boutons
 
+    // Création text "Dooble"
+    SDL_Color title_text_color = {255, 255, 255, 255};
+    SDL_Surface* tmp_surface = TTF_RenderText_Solid(bigFont, "Dooble", title_text_color);   // Surface "temporaire" pour placer correctement le bouton au centre
+    SDL_Rect title_rect = {screen.w/2 - tmp_surface->w/2, screen.h/8 - tmp_surface->h/2.5, tmp_surface->w, tmp_surface->h};
+    SDL_Rect text_title_rect;
+    SDL_FreeSurface(tmp_surface);
+
+
+    // Création des boutons
     SDL_Color button_text_color = {0,0,0,255};
     SDL_Color button_color = {255,255,255,255};
     SDL_Rect button_rects[3];
@@ -36,21 +44,13 @@ int main() {
     char* button_names[3] = {"Play", "Scores", "Quit"};
 
     for(int i=0 ; i<3 ; i++) {
-
         // Placement des boutons (= "gros rectangles")
         button_rects[i].w = screen.w / 3;
         button_rects[i].h = screen.h/ 6.5;
         button_rects[i].x = screen.w/2 - button_rects[i].w/2;
         button_rects[i].y = button_rects[i].h*3 - screen.h/8 + i*screen.h/5.5;    // Espacement vertical entre chaque boutons
-
-        // Placement des "petits rectangle" dans les boutons
-        SDL_Surface* tmp_surface = TTF_RenderText_Solid(smallFont, button_names[i], button_text_color);
-        text_button_rects[i].w = tmp_surface->w;
-        text_button_rects[i].h = tmp_surface->h;
-        text_button_rects[i].x = button_rects[i].x + (button_rects[i].w - text_button_rects[i].w)/2;
-        text_button_rects[i].y = button_rects[i].y + (button_rects[i].h - text_button_rects[i].h)/2;
-        SDL_FreeSurface(tmp_surface);
     }
+
 
 
     // Boucle principale
@@ -90,11 +90,6 @@ int main() {
         SDL_RenderClear(renderer_menu);
 
         // Création text "Dooble"
-        SDL_Color title_text_color = {255, 255, 255, 255};
-        SDL_Surface* tmp_surface = TTF_RenderText_Solid(bigFont, "Dooble", title_text_color);   // Surface "temporaire" pour placer correctement le texte au centre
-        SDL_Rect title_rect = {screen.w/2 - tmp_surface->w/2, screen.h/8 - tmp_surface->h/2.5, tmp_surface->w, tmp_surface->h};
-        SDL_Rect text_title_rect;
-        SDL_FreeSurface(tmp_surface);
         create_button(renderer_menu, title_rect, text_title_rect, "Dooble", bigFont, title_text_color, renderer_color);
 
 
