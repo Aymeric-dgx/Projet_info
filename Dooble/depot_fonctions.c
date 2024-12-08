@@ -165,3 +165,35 @@ void maj_input_box(SDL_Renderer* renderer, SDL_Rect box, SDL_Rect* text_box, SDL
         SDL_FreeSurface(text_surface);
     }
 }
+
+
+
+
+/*
+Fonction qui va permettre de créer et gérer + facilement des boutons (cf application fonctions) :
+    - Renderer
+    - Rect pour placer le bouton (créé et placé en ammont)
+    - Rect pour placer le texte (créé en ammont)
+    - Le texte à écrire dedans
+    - La police
+    - Couleur de la police
+    ' Couleur du fond
+ */
+
+void create_button(SDL_Renderer* renderer, SDL_Rect button_rect, SDL_Rect text_rect, char text[100], TTF_Font* font, SDL_Color font_color, SDL_Color button_rect_color) {
+
+    SDL_SetRenderDrawColor(renderer, button_rect_color.r, button_rect_color.g, button_rect_color.b, button_rect_color.a);
+    SDL_RenderFillRect(renderer, &button_rect);
+    SDL_Surface* tmp_surface = TTF_RenderText_Solid(font, text, font_color);
+    SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, tmp_surface);
+
+    text_rect.x = button_rect.x + button_rect.w/10;
+    text_rect.y = button_rect.y + button_rect.h/3;
+    text_rect.w = tmp_surface->w;
+    text_rect.h = tmp_surface->h;
+
+    SDL_RenderCopy(renderer, text_texture, NULL, &text_rect);
+
+    SDL_FreeSurface(tmp_surface);
+    SDL_DestroyTexture(text_texture);
+}
