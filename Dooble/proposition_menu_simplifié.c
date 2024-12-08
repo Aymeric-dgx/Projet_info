@@ -6,16 +6,7 @@
 #include "option.h"
 #include <stdio.h>
 
-
-int main() {
-    // Initialisation SDL + TTF (à retirer une fois "associé" avec le main, c est juste pour le test)
-    SDL_Init(SDL_INIT_EVERYTHING);
-    TTF_Init();
-
-    // Obtenir les dimensions de l'écran (idem, a retirer une fois "associé)
-    SDL_DisplayMode screen;
-    SDL_GetCurrentDisplayMode(0, &screen);
-
+int window_menu(SDL_DisplayMode screen) {
 
     // Création fenetre + renderer + chargement police (qui s'adaptera à l'écran)
     SDL_Window* window_menu = SDL_CreateWindow("Menu",
