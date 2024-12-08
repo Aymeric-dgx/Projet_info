@@ -6,6 +6,19 @@
 #include <stdio.h>
 #include "option.h"
 
+/* Fonction actuellement stockées : 
+    - click_in_rect : vérifie si le clic est dans rectangle ou non
+    
+    - edit_progress_bar_with_click : modifie une barre de progression en fonction d'un clic
+    - edit_progress_bar_with_ratio : modifie une barre de progression en fonction d'un pourcentage demandé
+    - maj_progress_bar : mets à jour visuellement une barre de progression
+
+    - activate_input_box : active/désactive une box de saisie (si clic dans rect ou non) et modifie simplement la chaine de caractère prévu pour sauvegardé la saisie
+    - maj_input_box : mets à jour visuellement une box de saisie
+
+    - create_button : créer un bouton avec le texte centré
+*/
+
 // Fonction qui verifie si un click est dans un rectangle, et renvoie 1 ou 0
 // Parametre : posistions x et y de la souris, le rectangle dans lequelle on veut verifier le click
 int click_in_rect(int mouse_x, int mouse_y, SDL_Rect rect) {
@@ -20,10 +33,10 @@ int click_in_rect(int mouse_x, int mouse_y, SDL_Rect rect) {
 
 /*
 Modifie la barre de progression en fonction d'un click (ne mets pas à jour, juste modifie les dimension du sub_rect) :
-    - Le rect pour la barre (qu'on aura créé et placé en amont)
-    - Un pointeur vers le rect pour la progression (qu'on aura créé en amont)
+    - Le rect pour la barre (créé et placé en amont)
+    - Un pointeur vers le rect pour la progression (créé en amont)
     - Le x et y de la souris, récupéré en ammont
-    - Un pointeur pour y enregistré le % de la barre remplie en fontion du clic. Si pas néscessaire, mettre NULL
+    - Un pointeur pour y enregistré le % de la barre remplie en fontion du clic. Si pas néscessaire de récupérer le % dans le main, mettre NULL
  */
 void edit_progress_bar_with_click(SDL_Rect bar, SDL_Rect* sub_bar, int mouse_x, int mouse_y, int* ratio_bar) {
     if (click_in_rect(mouse_x, mouse_y, bar)) {
@@ -42,8 +55,8 @@ void edit_progress_bar_with_click(SDL_Rect bar, SDL_Rect* sub_bar, int mouse_x, 
 
 /*
 Modifie la barre de progression en fonction d'un % souhaité (ne mets pas à jour, juste modifie les dimension du sub_rect) :
-    - Le rect pour la barre (qu'on aura créé et placé en amont)
-    - Un pointeur vers le rect pour la progression (qu'on aura créé en amont)
+    - Le rect pour la barre (créé et placé en amont)
+    - Un pointeur vers le rect pour la progression (créé en amont)
     - Le % de la barre qu'on veut remplir
 */
 void edit_progress_bar_with_ratio(SDL_Rect bar, SDL_Rect* sub_bar, int ratio) {
@@ -56,11 +69,12 @@ void edit_progress_bar_with_ratio(SDL_Rect bar, SDL_Rect* sub_bar, int ratio) {
 }
 
 /*
-Mets à jour la barre de progression (pensez à faire le renderClear dans le main) :
-    - Un pointeur du renderer (mettre simplement le renderer, car déja défini comme pointeur dans le main)
-    - Le rect pour la barre (créé et placer en ammont)
-    - Le rect pour la progression (créé puis modifié à l'aide des fonctions précédentes en ammont)
-    - La couleur (SDL_Color) définit en ammont pour les 2 rect
+Mets à jour la barre de progression :
+    - Renderer
+    - Rect pour la barre (créé et placer en ammont)
+    - Rect pour la progression (créé et modifié en ammont)
+    - Couleur du fond de la barre principale
+    - Couleur de la barre montrant la progression
  */
 void maj_progress_bar(SDL_Renderer* renderer, SDL_Rect bar, SDL_Rect sub_bar, SDL_Color bar_color, SDL_Color sub_bar_color) {
     SDL_SetRenderDrawColor (renderer, bar_color.r, bar_color.g, bar_color.b, bar_color.a);
@@ -68,6 +82,7 @@ void maj_progress_bar(SDL_Renderer* renderer, SDL_Rect bar, SDL_Rect sub_bar, SD
     SDL_SetRenderDrawColor (renderer, sub_bar_color.r, sub_bar_color.g, sub_bar_color.b, sub_bar_color.a);
     SDL_RenderFillRect (renderer, &sub_bar);
 }
+
 
 
 /*Fonction à mettre dans la gestion des evenements "nu", sans condition dans la boucle de gestions des evenemts (verifie lui meme la condtion des evenement)
@@ -79,6 +94,8 @@ Mise en place néscessaire :
             ATTENTION -> initialiser le premier caractere (p_texte[0] = '\0')
     - Le rect dans lequelle doit etre saise le texte (pour détecter si le clic active ou non la box de saisie)
  */
+
+
 void activate_input_box(SDL_Event* event, int* is_active, char* input_text, SDL_Rect input_box) {
     if(event->type == SDL_TEXTINPUT && *is_active ==1) {
         strcat(input_text, event->text.text);
@@ -86,48 +103,12 @@ void activate_input_box(SDL_Event* event, int* is_active, char* input_text, SDL_
     else if(event->type == SDL_MOUSEBUTTONDOWN) {
         int x, y;
         SDL_GetMouseState(&x, &y);
-        if(click_in_rect(x, y, input_box))  *is_active = 1;
-        else   *is_active = 0;
+        if(click_in_rect(x, y, input_box)) *is_active = 1;
+        else *is_active = 0;
     }
     else if(event->type == SDL_KEYDOWN && *is_active == 1) {
         if (event->key.keysym.sym == SDLK_BACKSPACE && strlen(input_text)>0) {
-            input_text[ strlen(input_text) - 1] = '0';
-        }
-        else if(event->key.keysym.sym == SDLK_RETURN) {
-            input_text[0] = '0';
-        }
-    }
-}
-
-
-
-// Pour voir comment mettre en place ces fonctions, cf exemple associé dans Exemple / Applications_fonctions
-
-/*
-Fonction à mettre dans la gestion des evenements "nu", sans condition dans la boucle de gestions des evenemts (verifie lui meme la condtion des evenement)
-Va verifier si le clic est dans la box de saisie, et va modifier un pointeur de str avec les entrées du clavier
-Mise en place néscessaire :
-    - Donner le POINTEUR de l'event qui a été créé dans le main
-    - Donner le POINTEUR de is_active pour "sauvegarder" dans le main si la box de saisie est cliqué ou pas
-    - Donner le POINTEUR (définit avec malloc) de la chaine de caractère à modifier (et non pas un tableau de char car ne peut pas etre return)µ
-            ATTENTION -> initialiser le premier caractere (p_texte[0] = '\0')
-    - Le rect dans lequelle doit etre saise le texte (pour détecter si le clic active ou non la box de saisie)
- */
-void activate_input_box(SDL_Event* event, int* is_active, char* input_text, SDL_Rect input_box) {
-
-    if(event->type == SDL_TEXTINPUT && *is_active ==1) {
-        strcat(input_text, event->text.text);
-    }
-    else if(event->type == SDL_MOUSEBUTTONDOWN) {
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-        if(click_in_rect(x, y, input_box))  *is_active = 1;
-        else   *is_active = 0;
-
-    }
-    else if(event->type == SDL_KEYDOWN && *is_active == 1) {
-        if (event->key.keysym.sym == SDLK_BACKSPACE && strlen(input_text)>0) {
-            input_text[ strlen(input_text) - 1] = '\0';
+            input_text[strlen(input_text) - 1] = '\0';
         }
         else if(event->key.keysym.sym == SDLK_RETURN) {
             input_text[0] = '\0';
