@@ -121,7 +121,7 @@ void activate_input_box(SDL_Event* event, int* is_active, char* input_text, SDL_
 Fonction qui met à jour la zone de saisie de texte :
     - Renderer
     - Rect pour la box de saisie (créé et placer en amont)
-    - Rect pour la zone de texte (créé avant)
+    - Rect pour la zone de texte (créé avant)        A VOIR POUR LE DEGAGER ET LE CREER DANS LA FONCTION ET PAS DANS LE MAIN
     - Couleur du fond de la box de saisie
     - Police
     - Couleur de police
