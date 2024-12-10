@@ -11,8 +11,8 @@ void edit_progress_bar_with_click(SDL_Rect bar, SDL_Rect* sub_bar, int mouse_x, 
 void edit_progress_bar_with_ratio(SDL_Rect bar, SDL_Rect* sub_bar, int ratio);
 void maj_progress_bar(SDL_Renderer* renderer, SDL_Rect bar, SDL_Rect sub_bar, SDL_Color bar_color, SDL_Color sub_bar_color);
 
-void activate_input_box(SDL_Event event, int* is_active, char* input_text, SDL_Rect input_box);
-void maj_input_box(SDL_Renderer* renderer, SDL_Rect box, SDL_Rect* text_box, SDL_Color box_color, TTF_Font* font, SDL_Color font_color, char* input_text);
+void activate_input_box(SDL_Event event, int* is_active, char* input_text, char* saved_text, SDL_Rect input_box);
+void maj_input_box(SDL_Renderer* renderer, SDL_Rect box, SDL_Color box_color, char* input_text, TTF_Font* font, SDL_Color font_color);
 
 void create_button(SDL_Renderer* renderer, SDL_Rect button_rect, char text[100], TTF_Font* font, SDL_Color font_color, SDL_Color button_rect_color) ;
 
