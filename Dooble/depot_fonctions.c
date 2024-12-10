@@ -86,17 +86,17 @@ void maj_progress_bar(SDL_Renderer* renderer, SDL_Rect bar, SDL_Rect sub_bar, SD
 
 
 /*Fonction à mettre dans la gestion des evenements "nu", sans condition dans la boucle de gestions des evenemts (verifie lui meme la condtion des evenement)
-Va verifier si le clic est dans la box de saisie, et va modifier un pointeur de str avec les entrées du clavier
-Mise en place néscessaire :
-    - Donner l'event qui a été créé dans le main
-    - Donner le POINTEUR de is_active pour "sauvegarder" dans le main si la box de saisie est cliqué ou pas
-    - Donner le POINTEUR (définit avec malloc) de la chaine de caractère à modifier (et non pas un tableau de char car ne peut pas etre return)+
-            ATTENTION -> initialiser le premier caractere (p_texte[0] = '\0')
+Va verifier si le clic est dans la box de saisie, et va modifier un pointeur de str avec les entrées du clavier :
+    - event qui a été créé dans le main
+    - POINTEUR de is_active pour "sauvegarder" dans le main si la box de saisie est cliqué ou pas
+    - POINTEUR (définit avec malloc) de la chaine de caractère à modifier (et non pas un tableau de char car ne peut pas etre return)
+    - POINtEUR (définit avec malloc) de la "zone" ou sauvegardé une saisie après avoir cliqué ENTER
+        - ATTENTION : initialiser le premier caractere des 2 str avec '\0'
     - Le rect dans lequelle doit etre saise le texte (pour détecter si le clic active ou non la box de saisie)
  */
 
 
-void activate_input_box(SDL_Event event, int* is_active, char* input_text, SDL_Rect input_box) {
+void activate_input_box(SDL_Event event, int* is_active, char* input_text, char* saved_text, SDL_Rect input_box) {
     if(event.type == SDL_TEXTINPUT && *is_active ==1) {
         strcat(input_text, event.text.text);
     }
@@ -111,6 +111,7 @@ void activate_input_box(SDL_Event event, int* is_active, char* input_text, SDL_R
             input_text[strlen(input_text) - 1] = '\0';
         }
         else if(event.key.keysym.sym == SDLK_RETURN) {
+            strcpy(saved_text, input_text);
             input_text[0] = '\0';
         }
     }
@@ -127,7 +128,7 @@ Fonction qui met à jour la zone de saisie de texte :
     - Couleur de police
     - Pointeur pour communiquer le texte saisie (et qui a été saisie) entre la fonction et le main
  */
-void maj_input_box(SDL_Renderer* renderer, SDL_Rect box, SDL_Rect* text_box, SDL_Color box_color, TTF_Font* font, SDL_Color font_color, char* input_text) {
+void maj_input_box(SDL_Renderer* renderer, SDL_Rect box, SDL_Color box_color, char* input_text, TTF_Font* font, SDL_Color font_color) {
 
     SDL_SetRenderDrawColor(renderer, box_color.r, box_color.g, box_color.b, box_color.a);
     SDL_RenderFillRect(renderer, &box);
@@ -136,12 +137,13 @@ void maj_input_box(SDL_Renderer* renderer, SDL_Rect box, SDL_Rect* text_box, SDL
         SDL_Surface* text_surface = TTF_RenderText_Solid(font, input_text, font_color);
         SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
 
-        text_box->x = box.x+box.w/10;
-        text_box->y = box.y + (box.h - text_surface->h) / 2;
-        text_box->w = text_surface->w;
-        text_box->h = text_surface->h;
+        SDL_Rect text_rect;
+        text_rect.x = box.x+box.w/10;
+        text_rect.y = box.y + (box.h - text_surface->h) / 2;
+        text_rect.w = text_surface->w;
+        text_rect.h = text_surface->h;
 
-        SDL_RenderCopy(renderer, text_texture, NULL, text_box);
+        SDL_RenderCopy(renderer, text_texture, NULL, &text_rect);
         SDL_DestroyTexture(text_texture);
         SDL_FreeSurface(text_surface);
     }
