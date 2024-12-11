@@ -1,47 +1,50 @@
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "option.h"
 
 int main() {
-    // Initialisation SDL + TTF (à retirer une fois "associé" avec le main, c est juste pour le test)
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
 
-    // Obtenir les dimensions de l'écran (idem, a retirer une fois "associé)
     SDL_DisplayMode screen;
     SDL_GetCurrentDisplayMode(0, &screen);
+    SDL_Window* window = SDL_CreateWindow("Test",
+                                                SDL_WINDOWPOS_CENTERED,
+                                                SDL_WINDOWPOS_CENTERED,
+                                                screen.w, screen.h,
+                                                SDL_WINDOW_SHOWN);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    TTF_Font* font = TTF_OpenFont("../police/arial.ttf", 60);
 
-    SDL_Window* window_regles = SDL_CreateWindow("Dooble",
-                                         SDL_WINDOWPOS_CENTERED,
-                                         SDL_WINDOWPOS_CENTERED,
-                                         screen.w, screen.h,
-                                         SDL_WINDOW_SHOWN);
-    SDL_Renderer* renderer_regles = SDL_CreateRenderer(window_regles , -1, SDL_RENDERER_ACCELERATED);
-    TTF_Font* font = TTF_OpenFont("../police/arial.ttf", 60); // Police pour texte
-
-    SDL_Rect box = {200,200,300,100};
-    SDL_Rect rect_text;
-    SDL_Rect* p_rect_text = &rect_text;
+    SDL_Rect text_box = {400,400,600,100};
 
     SDL_Event event;
-    SDL_Event* p_event = &event;
     int running = 1;
+    int is_active = 0;
     char* input_text = malloc(sizeof(char)*50);
     input_text[0] = '\0';
-    int is_active = 0;
-    int* p_is_active = &is_active;
+    char* saved_text = malloc(sizeof(char)*50);
+    saved_text[0] = '\0';
 
     while(running) {
         while(SDL_PollEvent(&event)) {
-            if(event.type == SDL_QUIT) {
-                running = 0;
-            }
-            activate_input_box(p_event, p_is_active, input_text, box);
+            if(event.type == SDL_QUIT) running = 0;
+            activate_input_box(event, &is_active, input_text, saved_text, text_box);
         }
+        SDL_SetRenderDrawColor(renderer, 150,100,200,255);
+        SDL_RenderClear(renderer);
 
-        SDL_Color box_color = {0,255,0,255};
-        SDL_Color font_color = {255,0,255,255};
+        SDL_Color box_color = {255,255,255,255};
+        SDL_Color font_color = {0,0,0,255};
+        maj_input_box(renderer, text_box, box_color, input_text,font, font_color);
 
-        maj_input_box(renderer_regles, box, p_rect_text, box_color, font, font_color, input_text);
-
-        SDL_RenderPresent(renderer_regles);
+        SDL_RenderPresent(renderer);
     }
+    printf("%s %s",saved_text, input_text);
     free(input_text);
+    free(saved_text);
 }
