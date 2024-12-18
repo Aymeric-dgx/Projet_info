@@ -20,10 +20,12 @@
 */
 
 // Fonction qui verifie si un click est dans un rectangle, et renvoie 1 ou 0
-// Parametre : posistions x et y de la souris, le rectangle dans lequelle on veut verifier le click
-int click_in_rect(int mouse_x, int mouse_y, SDL_Rect rect) {
-    if (mouse_x >= rect.x && mouse_x <= rect.x+rect.w &&
-        mouse_y >= rect.y && mouse_y <= rect.y+rect.h) {
+// Parametre : le rectangle dans lequelle on veut verifier le click
+int click_in_rect(SDL_Rect rect) {
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    if (x >= rect.x && x <= rect.x+rect.w &&
+        y >= rect.y && y <= rect.y+rect.h) {
         return 1;
     } else {
         return 0;
@@ -35,20 +37,20 @@ int click_in_rect(int mouse_x, int mouse_y, SDL_Rect rect) {
 Modifie la barre de progression en fonction d'un click (ne mets pas à jour, juste modifie les dimension du sub_rect) :
     - Le rect pour la barre (créé et placé en amont)
     - Un pointeur vers le rect pour la progression (créé en amont)
-    - Le x et y de la souris, récupéré en ammont
     - Un pointeur pour y enregistré le % de la barre remplie en fontion du clic. Si pas néscessaire de récupérer le % dans le main, mettre NULL
  */
-void edit_progress_bar_with_click(SDL_Rect bar, SDL_Rect* sub_bar, int mouse_x, int mouse_y, int* ratio_bar) {
-    if (click_in_rect(mouse_x, mouse_y, bar)) {
+void edit_progress_bar_with_click(SDL_Rect bar, SDL_Rect* sub_bar, float* ratio_bar) {
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    if (click_in_rect(bar)) {
         sub_bar->x = bar.x;
         sub_bar->y = bar.y;
-        sub_bar->w = mouse_x - bar.x;
+        sub_bar->w = x - bar.x;
         sub_bar->h = bar.h;
 
         if (ratio_bar != NULL) {
-            float f_mouse_x = mouse_x, f_barre_w = bar.w, f_barre_x = bar.x;
-            float tmp_ratio= ( (f_mouse_x - f_barre_x) / f_barre_w ) *100;
-            *ratio_bar = tmp_ratio;
+            float f_mouse_x = x, f_barre_w = bar.w, f_barre_x = bar.x;
+            *ratio_bar = ( (f_mouse_x - f_barre_x) / f_barre_w );
         }
     }
 }
@@ -101,9 +103,7 @@ void activate_input_box(SDL_Event event, int* is_active, char* input_text, char*
         strcat(input_text, event.text.text);
     }
     else if(event.type == SDL_MOUSEBUTTONDOWN) {
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-        if(click_in_rect(x, y, input_box)) *is_active = 1;
+        if(click_in_rect(input_box)) *is_active = 1;
         else *is_active = 0;
     }
     else if(event.type == SDL_KEYDOWN && *is_active == 1) {
