@@ -226,6 +226,7 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
         while(SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT) {
                 running = 0;
+                *nb_window = 0;
             }
             else if(event.type == SDL_MOUSEBUTTONDOWN) {
                 // Modification mode séléctionné
