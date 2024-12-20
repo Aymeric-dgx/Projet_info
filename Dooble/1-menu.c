@@ -3,24 +3,23 @@
 #include <SDL_ttf.h>
 #include <stdio.h>
 
-int window_menu(int screen_width, int screen_height) {
-
+void window_menu(SDL_DisplayMode screen, int* nb_window) {
     SDL_Window* window_menu = SDL_CreateWindow("Dooble",
                                           SDL_WINDOWPOS_CENTERED,
                                           SDL_WINDOWPOS_CENTERED,
-                                          screen_width, screen_height,
+                                          screen.w, screen.h,
                                           SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer_menu = SDL_CreateRenderer(window_menu, -1, SDL_RENDERER_ACCELERATED);
 
     // Charger la police
     TTF_Font* bigFont = TTF_OpenFont("../police/arial.ttf", 128); // Police grande taille
-    TTF_Font* smallFont = TTF_OpenFont("../police/arial.ttf", (screen_width / 450) * 24); // Police petite taille
+    TTF_Font* smallFont = TTF_OpenFont("../police/arial.ttf", (screen.w / 450) * 24); // Police petite taille
 
     // Texte "Dooble"
     SDL_Color textColor = {255, 255, 255, 255};
     SDL_Surface* titleSurface = TTF_RenderText_Solid(bigFont, "Dooble", textColor);
     SDL_Texture* titleTexture = SDL_CreateTextureFromSurface(renderer_menu, titleSurface);
-    SDL_Rect titleRect = {screen_width / 2 - titleSurface->w / 2, screen_height / 8 - titleSurface->h / 2, titleSurface->w, titleSurface->h};
+    SDL_Rect titleRect = {screen.w / 2 - titleSurface->w / 2, screen.h / 8 - titleSurface->h / 2, titleSurface->w, titleSurface->h};
     SDL_FreeSurface(titleSurface);
 
     // Boutons (trois boutons alignés verticalement)
@@ -34,10 +33,10 @@ int window_menu(int screen_width, int screen_height) {
         SDL_Surface* buttonSurface = TTF_RenderText_Solid(smallFont, buttonLabels[i], buttonTextColor);
         buttonTextures[i] = SDL_CreateTextureFromSurface(renderer_menu, buttonSurface);
 
-        buttons[i].w = screen_width / 3; // Largeur du bouton (texte + padding)
-        buttons[i].h = screen_height / 6.5; // Hauteur du bouton (texte + padding)
-        buttons[i].x = screen_width / 2 - buttons[i].w / 2;
-        buttons[i].y = screen_height / 2 + buttons[i].h * i - buttons[i].h / 1.5 + (screen_height/40) * i - screen_height/15; // Espacement vertical entre les boutons
+        buttons[i].w = screen.w / 3; // Largeur du bouton (texte + padding)
+        buttons[i].h = screen.h / 6.5; // Hauteur du bouton (texte + padding)
+        buttons[i].x = screen.w / 2 - buttons[i].w / 2;
+        buttons[i].y = screen.h / 2 + buttons[i].h * i - buttons[i].h / 1.5 + (screen.h/40) * i - screen.h/15; // Espacement vertical entre les boutons
 
         // Calcul de la position du texte
         buttonTextRects[i].w = buttonSurface->w;
@@ -48,8 +47,6 @@ int window_menu(int screen_width, int screen_height) {
         SDL_FreeSurface(buttonSurface);
     }
 
-
-    int returning = 0;
     int running = 1;
     SDL_Event event;
 
@@ -63,16 +60,16 @@ int window_menu(int screen_width, int screen_height) {
                         mouseY >= buttons[i].y && mouseY <= buttons[i].y + buttons[i].h) {
                         if (i == 0) {
                             running = 0;
-                            returning = i+1;
                             SDL_Log("Bouton 'Play' cliquer !");
+                            *nb_window = 2;
                         } else if (i == 1) {
                             running = 0;
-                            returning = i+1;
                             SDL_Log("Bouton 'Score' cliquer !");
+                            // A modifier
                         } else if (i == 2) {
                             running = 0;
-                            returning = i+1;
                             SDL_Log("Bouton 'Quit' cliquer !");
+                            *nb_window = 0;
                         }
                     }
                 }
@@ -107,5 +104,4 @@ int window_menu(int screen_width, int screen_height) {
     SDL_DestroyWindow(window_menu);
 
 
-    return returning;
 }
