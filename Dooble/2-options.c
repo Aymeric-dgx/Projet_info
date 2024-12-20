@@ -122,7 +122,13 @@ void activate_words_input_box(SDL_Event event, int* is_active, char* input_text,
 
 
 
+
+
+
+
+
 void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_end, int* time_at_end, int* nb_words_at_end, int* gamemode_at_end, char** names_player_save_at_end) {
+
 
     // Création window + renderer + police
     SDL_Window* window_regles = SDL_CreateWindow("Dooble",
@@ -177,6 +183,7 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
     SDL_Rect title_nb_words_rect = {screen.w/1.25, screen.h/1.8, screen.w/20, screen.h/20};
 
     SDL_Rect play_button = {screen.w/4, screen.h/1.2, screen.w/2, screen.h/10};
+    SDL_Rect go_back_menu_rect = {0, 0, screen.w/10, screen.h/20};
 
 
     // Déclarations des variable utiles dans la boucle
@@ -246,13 +253,18 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
                 if(click_in_rect(play_button)) {
                     if(nb_player >0) {
                         running = 0;
-                        *nb_window = 3;
+                        *nb_window = 2;
                         *nb_joueurs_at_end = nb_player;
                         *time_at_end = int_time_choosen;
                         *nb_words_at_end = int_words_choosen;
                         *gamemode_at_end = multi_activated;
                         for(int i=0 ; i<nb_player ; i++) names_player_save_at_end[i] = names_player_save[i];
                     }
+                }
+                // Si bouton Menu cliqué, simplement retourner au menu
+                if(click_in_rect(go_back_menu_rect)) {
+                    running = 0;
+                    *nb_window = 1;
                 }
             }
             // Activation input_box pour time
@@ -324,6 +336,9 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
         // Maj bouton Play
         create_button(renderer_regles, play_button, "PLAY", big_font, white_color, background_color);
 
+        // Maj bouton Menu
+        create_button(renderer_regles, go_back_menu_rect, "Menu", medium_font, black_color, white_color);
+
         // Maj visuelle de la fenetre
         SDL_RenderPresent(renderer_regles);
     }
@@ -335,8 +350,6 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
     TTF_CloseFont(big_font);
     TTF_CloseFont(medium_font);
     TTF_CloseFont(small_font);
-    SDL_Quit();
-    TTF_Quit();
 
     free(checkbox_mode);
     free(rects_name_list);
