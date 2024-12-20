@@ -1,4 +1,3 @@
-#define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <stdio.h>
@@ -53,25 +52,26 @@ void window_menu(SDL_DisplayMode screen, int* nb_window) {
     while (running) {
         // Gestion des événements
         while (SDL_PollEvent(&event)) {
+            if(event.type == SDL_QUIT) {
+                running = 0;
+                *nb_window = 0;
+            }
             if (event.type == SDL_MOUSEBUTTONDOWN) {
-                int mouseX = event.button.x, mouseY = event.button.y;
-                for (int i = 0; i < 3; i++) {
-                    if (mouseX >= buttons[i].x && mouseX <= buttons[i].x + buttons[i].w &&
-                        mouseY >= buttons[i].y && mouseY <= buttons[i].y + buttons[i].h) {
-                        if (i == 0) {
-                            running = 0;
-                            SDL_Log("Bouton 'Play' cliquer !");
-                            *nb_window = 2;
-                        } else if (i == 1) {
-                            running = 0;
-                            SDL_Log("Bouton 'Score' cliquer !");
-                            // A modifier
-                        } else if (i == 2) {
-                            running = 0;
-                            SDL_Log("Bouton 'Quit' cliquer !");
-                            *nb_window = 0;
-                        }
-                    }
+
+                if(click_in_rect(buttons[0])) {
+                    running = 0;
+                    SDL_Log("Bouton 'Play' cliquer !");
+                    *nb_window = 2;
+                }
+                if(click_in_rect(buttons[1])) {
+                    running = 0;
+                    SDL_Log("Bouton 'Score' cliquer !");
+                    // A modifier
+                }
+                if(click_in_rect(buttons[2])) {
+                    running = 0;
+                    SDL_Log("Bouton 'Quit' cliquer !");
+                    *nb_window = 0;
                 }
             }
         }
