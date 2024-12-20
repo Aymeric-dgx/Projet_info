@@ -1,4 +1,3 @@
-#define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <stdio.h>
@@ -102,14 +101,28 @@ void activate_time_input_box(SDL_Event event, int* is_active, char* input_text, 
     }
 }
 
+void activate_words_input_box(SDL_Event event, int* is_active, char* input_text, char* saved_text, SDL_Rect input_box) {
+    if(event.type == SDL_TEXTINPUT && *is_active ==1) {
+        strcat(input_text, event.text.text);
+    }
+    else if(event.type == SDL_MOUSEBUTTONDOWN) {
+        if(click_in_rect(input_box)) *is_active = 1;
+        else *is_active = 0;
+    }
+    else if(event.type == SDL_KEYDOWN && *is_active == 1) {
+        if (event.key.keysym.sym == SDLK_BACKSPACE && strlen(input_text)>0) {
+            input_text[strlen(input_text) - 1] = '\0';
+        }
+        else if(event.key.keysym.sym == SDLK_RETURN) {
+            if(atoi(input_text)>=6 && atoi(input_text)<=12) strcpy(saved_text, input_text);
+            input_text[0] = '\0';
+        }
+    }
+}
 
 
-int main() {
-    // Initialisation + obtention dimension écran (à supprimer une fois intégré au projets, en ajoutant en parametre une strcuture screen)
-    SDL_Init(SDL_INIT_EVERYTHING);
-    TTF_Init();
-    SDL_DisplayMode screen;
-    SDL_GetCurrentDisplayMode(0, &screen);
+
+void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_end, int* time_at_end, int* nb_words_at_end, int* gamemode_at_end, char** names_player_save_at_end) {
 
     // Création window + renderer + police
     SDL_Window* window_regles = SDL_CreateWindow("Dooble",
@@ -125,38 +138,45 @@ int main() {
 
     // Création des structures à modfifier / utiliser dans le main
 
-    SDL_Rect* checkbox_mode = malloc(sizeof(SDL_Rect)*2);                               // Rect des checkbox
+    SDL_Rect* checkbox_mode = malloc(sizeof(SDL_Rect)*2);
     for(int i=0 ; i<2 ; i++) {
         checkbox_mode[i].w = screen.w/50;
         checkbox_mode[i].h = screen.w/50;
         checkbox_mode[i].x = screen.w/15 + i*checkbox_mode[i].w*8;
         checkbox_mode[i].y = screen.h/3.3;
     }
-    SDL_Rect name_input_box = {screen.w/10,screen.h/2.2,screen.w/5,screen.h/15};      // Rect de l'input box pour la saisie du nom des joueurs
-    SDL_Rect* rects_name_list = malloc(sizeof(SDL_Rect)*15);                            // Rect des noms dans la liste (si on clique dessus pour modifier le nom)
+    SDL_Rect name_input_box = {screen.w/10,screen.h/2.2,screen.w/5,screen.h/15};
+    SDL_Rect* rects_name_list = malloc(sizeof(SDL_Rect)*15);
     for(int i=0 ; i<15 ; i++) {
         rects_name_list[i].x = screen.w/1.2;
         rects_name_list[i].y = screen.h/8 + i*screen.w/45;
         rects_name_list[i].w = screen.w/8.5;
         rects_name_list[i].h = screen.w/50;
     }
-    SDL_Rect* rect_delete_name_in_list = malloc(sizeof(SDL_Rect)*15);                            // Rect des petites croix à coté des noms dans la liste pour les supprimer (si cliqué)
+    SDL_Rect* rect_delete_name_in_list = malloc(sizeof(SDL_Rect)*15);
     for(int i=0 ; i<15 ; i++) {
         rect_delete_name_in_list[i].x = screen.w/1 - screen.w/20;
         rect_delete_name_in_list[i].y = screen.h/8 + i*screen.w/45;
         rect_delete_name_in_list[i].w = screen.w/50;
         rect_delete_name_in_list[i].h = screen.w/50;
     }
-    SDL_Rect time_progress_bar = {screen.w/15,screen.h/1.5,screen.w/4,screen.h/15};                                                                 // Rect de la progress bar pour le temps
+    SDL_Rect time_progress_bar = {screen.w/15,screen.h/1.5,screen.w/4,screen.h/15};
     SDL_Rect time_sub_progress_bar;
-    SDL_Rect time_input_box = {screen.w/5.5,screen.h/1.3,screen.w/8,screen.h/20};    // Rect de l input box pour la saisie manuelle du temps
+    SDL_Rect time_input_box = {screen.w/5.5,screen.h/1.3,screen.w/8,screen.h/20};
     SDL_Rect affichage_time = {screen.w/15,screen.h/1.3,screen.w/15,screen.h/20};
-    SDL_Rect min_bar = {screen.w/15.5,screen.h/1.65,screen.w/20,screen.h/20};
-    SDL_Rect max_bar = {screen.w/3.5,screen.h/1.65,screen.w/20,screen.h/20};
+    SDL_Rect min_time_bar = {screen.w/15.5,screen.h/1.65,screen.w/20,screen.h/20};
+    SDL_Rect max_time_bar = {screen.w/3.5,screen.h/1.65,screen.w/20,screen.h/20};
     SDL_Rect title_time_rect = {screen.w/6, screen.h/1.8, screen.w/20, screen.h/20};
-    SDL_Rect words_progress_bar;                                                                // Rect de la progress bar pour le nb de mots
-    SDL_Rect words_input_box;                                                                   // Rect de l'input box pour la saisie manuelle du nb de mots
-    SDL_Rect play_button;                                                                       // Rect du Play
+
+    SDL_Rect words_progress_bar = {screen.w/1.4,screen.h/1.5,screen.w/4,screen.h/15};
+    SDL_Rect words_sub_progress_bar;
+    SDL_Rect words_input_box = {screen.w/1.2,screen.h/1.3,screen.w/8,screen.h/20};
+    SDL_Rect affichage_nb_mots = {screen.w/1.4,screen.h/1.3,screen.w/15,screen.h/20};
+    SDL_Rect min_words_bar = {screen.w/1.45,screen.h/1.65,screen.w/20,screen.h/20};
+    SDL_Rect max_words_bar = {screen.w/1.1,screen.h/1.65,screen.w/20,screen.h/20};
+    SDL_Rect title_nb_words_rect = {screen.w/1.25, screen.h/1.8, screen.w/20, screen.h/20};
+
+    SDL_Rect play_button = {screen.w/4, screen.h/1.2, screen.w/2, screen.h/10};
 
 
     // Déclarations des variable utiles dans la boucle
@@ -170,8 +190,13 @@ int main() {
     int input_box_enter_name_active = 0;
     int nb_player_to_delete = -1;
     int input_box_time_active = 0;
+    int input_box_words_active = 0;
     int time_bar_clicked = 0;
-    float ratio_time;
+    int int_time_choosen = 60;
+    int words_bar_clicked = 0;
+    int int_words_choosen = 6;
+    float ratio_time = 0;
+    float ratio_words = 0;
 
 
     char* name_in_progress = malloc(sizeof(char)*50);       name_in_progress[0] = '\0';            // Stocker la saise en cours lors de l'entrée du nom
@@ -184,7 +209,8 @@ int main() {
     }
     char input_time_select[5] = "";
     char save_time_select[5] = "60";
-
+    char input_words_select[5] = "";
+    char save_words_select[5] = "6";
 
 
     // Boucle principale
@@ -196,19 +222,45 @@ int main() {
             }
             else if(event.type == SDL_MOUSEBUTTONDOWN) {
                 // Modification mode séléctionné
-                if(click_in_rect(checkbox_mode[0])) multi_activated = 0;
+                if(click_in_rect(checkbox_mode[0])) {
+                    multi_activated = 0;
+                    for (int i=1 ; i<nb_player ; i++) names_player_save[i][0] = '\0';
+                    nb_player = 1;
+                }
                 if(click_in_rect(checkbox_mode[1])) multi_activated = 1;
                 // Supprimer joueur si clic dans la case pour le supprimer
                 for(int i=0 ; i<=nb_player ; i++) {
                     if(click_in_rect(rect_delete_name_in_list[i]))  nb_player_to_delete = i;
                 }
-                // Modification time si clic dans la barre de progression
+                // Modification time si clic dans la barre de progression pour le time
                 if(click_in_rect(time_progress_bar)) {
                     edit_progress_bar_with_click(time_progress_bar, &time_sub_progress_bar, &ratio_time);
                     time_bar_clicked = 1;
-                } else time_bar_clicked = 0;
+                }
+                // Modification time si clic dans la barre de progression pour le nb de mots
+                if(click_in_rect(words_progress_bar)) {
+                    edit_progress_bar_with_click(words_progress_bar, &words_sub_progress_bar, &ratio_words);
+                    words_bar_clicked = 1;
+                }
+                // Si bouton PLAY cliqué, retourner toutes les infos de jeu et stopper la window
+                if(click_in_rect(play_button)) {
+                    if(nb_player >0) {
+                        running = 0;
+                        *nb_window = 0;
+                        *nb_joueurs_at_end = nb_player;
+                        *time_at_end = int_time_choosen;
+                        *nb_words_at_end = int_words_choosen;
+                        *gamemode_at_end = multi_activated;
+                        for(int i=0 ; i<nb_player ; i++) names_player_save_at_end[i] = names_player_save[i];
+                    }
+                }
             }
+            // Activation input_box pour time
             activate_time_input_box(event, &input_box_time_active, input_time_select, save_time_select, time_input_box);
+            if(input_box_time_active) time_bar_clicked = 0;
+            // Activation input_box pour time
+            activate_words_input_box(event, &input_box_words_active, input_words_select, save_words_select, words_input_box);
+            if(input_box_words_active) words_bar_clicked = 0;
 
             // Activation saisie nom joueur + detection si nouveau nom validé ou pas
             char tmp[50];
@@ -242,15 +294,35 @@ int main() {
         }
         maj_progress_bar(renderer_regles, time_progress_bar, time_sub_progress_bar, white_color, black_color);
         maj_input_box(renderer_regles, time_input_box, white_color, input_time_select, small_font, black_color);
-        char tmp[5];
-        float tmp1 = ratio_time*120 +60;
-        int tmp2 = tmp1;
-        sprintf(tmp, "%d", tmp2);
-        strcat(tmp, " sec");
-        create_button(renderer_regles, affichage_time, tmp, small_font, black_color, white_color);
-        create_button(renderer_regles, min_bar, "60 sec", small_font, white_color, background_color);
-        create_button(renderer_regles, max_bar, "180 sec", small_font, white_color, background_color);
+        char tmp_time[5];
+        float tmp1_time = ratio_time*120 +60;
+        int_time_choosen = tmp1_time;
+        sprintf(tmp_time, "%d", int_time_choosen);
+        strcat(tmp_time, " sec");
+        create_button(renderer_regles, affichage_time, tmp_time, small_font, black_color, white_color);
+        create_button(renderer_regles, min_time_bar, "60 sec", small_font, white_color, background_color);
+        create_button(renderer_regles, max_time_bar, "180 sec", small_font, white_color, background_color);
         create_button(renderer_regles, title_time_rect, "Temps de jeu", medium_font, white_color, background_color);
+
+        // Maj de la zone de choix du temps
+        if(!words_bar_clicked) {
+            ratio_words = (atof(save_words_select) - 6) / 6;
+            edit_progress_bar_with_ratio(words_progress_bar, &words_sub_progress_bar, ratio_words*100);
+        }
+        maj_progress_bar(renderer_regles, words_progress_bar, words_sub_progress_bar, white_color, black_color);
+        maj_input_box(renderer_regles, words_input_box, white_color, input_words_select, small_font, black_color);
+        char tmp_words[5];
+        float tmp1_words = ratio_words*6 + 6;
+        int_words_choosen = tmp1_words;
+        sprintf(tmp_words, "%d", int_words_choosen);
+        strcat(tmp_words, " mots");
+        create_button(renderer_regles, affichage_nb_mots, tmp_words, small_font, black_color, white_color);
+        create_button(renderer_regles, min_words_bar, "6 mots", small_font, white_color, background_color);
+        create_button(renderer_regles, max_words_bar, "12 mots", small_font, white_color, background_color);
+        create_button(renderer_regles, title_nb_words_rect, "Nombre de mots en jeu", medium_font, white_color, background_color);
+
+        // Maj bouton Play
+        create_button(renderer_regles, play_button, "PLAY", big_font, white_color, background_color);
 
         // Maj visuelle de la fenetre
         SDL_RenderPresent(renderer_regles);
