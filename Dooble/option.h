@@ -3,6 +3,8 @@
 
 int window_menu();
 int window_play();
+void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_end, int* time_at_end, int* nb_words_at_end, int* gamemode_at_end, char** names_player_save_at_end);
+
 
 // Petite fonctions utilitaires
 int click_in_rect(SDL_Rect rect);
