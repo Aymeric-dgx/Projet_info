@@ -3,11 +3,12 @@
 #include <SDL_ttf.h>
 #include "option.h"
 
-/* Aymeric : renommer les fichiers
-main
-1-menu
-2-start
-pour qu il corresponde au "numero" de leur fenetre respective, pour que ce soit moins ambigue ?
+/* nb_window :
+0 : Quitter (stopper le programme)
+1 : menu
+2 : options
+3 : game    (ou 3 : solo, 4 : multi ?)
+4 : scores
 */
 
 
