@@ -10,6 +10,7 @@ strcspm(ligne, "\n")
 fopens("...", "r")
 fclose()
 La "structure" FILE
+time_t
 */
 
 int taille = 0;
