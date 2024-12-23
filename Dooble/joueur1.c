@@ -3,6 +3,15 @@
 #include <time.h>
 #include <string.h>
 
+/* Notes Aymeric, documenter dans annexe SDL :
+rewind(fill)
+fgets(ligne, sizeof(ligne), fil)
+strcspm(ligne, "\n")
+fopens("...", "r")
+fclose()
+La "structure" FILE
+*/
+
 int taille = 0;
 
 void parcourire_liste(FILE*fil,int in, char*mot) {
