@@ -11,6 +11,7 @@ fopens("...", "r")
 fclose()
 La "structure" FILE
 time_t
+ftell(fill)
 */
 
 int taille = 0;
