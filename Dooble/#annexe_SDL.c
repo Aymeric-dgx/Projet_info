@@ -109,7 +109,8 @@ MAX_TEXT : Le nombre maximum de caractères à copier.
 
 
 // Partie gestion de fichier
-FILE* fopen(filename, "r");  // retourne un pointeur de type FILE vers le fichier "filename" avec le mode d'éditon choisie (r, w, a, r+, w+, a+), grâce auquel on pourra effectuer diverse opérations sur le fichier
+FILE* fopen(filename, "r");  // Retourne un pointeur de type FILE vers le fichier "filename" avec le mode d'éditon choisie (r, w, a, r+, w+, a+), grâce auquel on pourra effectuer diverse opérations sur le fichier
 rewind(fil);  // Repositionne le curseur du fichier au début de ce dernier (avec fil un FILE*)
-strcspn(ligne, "\n");  // renvoie un int indiquant le nb de char dans le str avant de rencontrer un \n
-char *fgets(char *str, int n, FILE *stream); // Lit une ligne de texte depuis un flux d'entrée, comme un fichier ou l'entrée standard (stdin).
+strcspn(ligne, "\n");  // Renvoie un int indiquant le nb de char dans le str avant de rencontrer un \n
+char *fgets(char* str, int n, FILE* stream); // Lit une ligne de texte depuis un flux d'entrée (ex : un fichiers) : pointeur vers un tab de char où stocker la valeur, nb max de caractère à lire, flux d'entrée
+
