@@ -112,5 +112,8 @@ MAX_TEXT : Le nombre maximum de caractères à copier.
 FILE* fopen(filename, "r");  // Retourne un pointeur de type FILE vers le fichier "filename" avec le mode d'éditon choisie (r, w, a, r+, w+, a+), grâce auquel on pourra effectuer diverse opérations sur le fichier
 rewind(fil);  // Repositionne le curseur du fichier au début de ce dernier (avec fil un FILE*)
 strcspn(ligne, "\n");  // Renvoie un int indiquant le nb de char dans le str avant de rencontrer un \n
-char *fgets(char* str, int n, FILE* stream); // Lit une ligne de texte depuis un flux d'entrée (ex : un fichiers) : pointeur vers un tab de char où stocker la valeur, nb max de caractère à lire, flux d'entrée
-
+char* fgets(char* str, int n, FILE* stream); // Lit une ligne de texte depuis un flux d'entrée (ex : un fichiers) : pointeur vers un tab de char où stocker la valeur, nb max de caractère à lire, flux d'entrée
+// nb : return le pointeur de sotckage (utile pour mettre dans des if par exemple)
+time_t // Utiliser pour rerésenter le temps en secondes depuis le 1er janvier 1970
+ftell(FILE *stream)  // Retourne en bits la position du curseur
+fseek(file, 10, SEEK_SET);  // Déplace le curseur de lecture/écriture à une position spécifique dans un fichier : fichier, nb de bytes à déplacer, positon de départ à partir de lauqelle on déplace le curseur
