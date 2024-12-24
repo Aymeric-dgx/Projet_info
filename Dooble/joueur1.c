@@ -4,12 +4,7 @@
 #include <string.h>
 
 /* Notes Aymeric, documenter dans annexe SDL :
-rewind(fill)
-fgets(ligne, sizeof(ligne), fil)
-strcspm(ligne, "\n")
-fopens("...", "r")
-fclose()
-La "structure" FILE
+
 time_t
 ftell(fill)
 */
