@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <stdio.h>
+#include "option.h"
 
 void window_menu(SDL_DisplayMode screen, int* nb_window) {
     SDL_Window* window_menu = SDL_CreateWindow("Dooble",
