@@ -4,6 +4,7 @@
 
 void window_menu(SDL_DisplayMode screen, int* nb_window);
 void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_end, int* time_at_end, int* nb_words_at_end, int* gamemode_at_end, char** names_player_save_at_end);
+void window_play_solo(SDL_DisplayMode screen, int* nb_window, int nb_words, int play_time, int* score);
 
 
 // Fonctions pour la fenetre play
@@ -17,7 +18,7 @@ void generate_list_solo(int nb_words, char** player_list, char** common_list, ch
 int click_in_rect(SDL_Rect rect);
 
 void edit_progress_bar_with_click(SDL_Rect bar, SDL_Rect* sub_bar, float* ratio_bar);
-void edit_progress_bar_with_ratio(SDL_Rect bar, SDL_Rect* sub_bar, int ratio);
+void edit_progress_bar_with_ratio(SDL_Rect bar, SDL_Rect* sub_bar, float ratio);
 void maj_progress_bar(SDL_Renderer* renderer, SDL_Rect bar, SDL_Rect sub_bar, SDL_Color bar_color, SDL_Color sub_bar_color);
 
 void activate_input_box(SDL_Event event, int* is_active, char* input_text, char* saved_text, SDL_Rect input_box);
