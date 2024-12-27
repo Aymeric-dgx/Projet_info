@@ -4,20 +4,13 @@
 #include "option.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
 #include "option.h"
 
-/* Fonction actuellement stockées :
-    - click_in_rect : vérifie si le clic est dans rectangle ou non
 
-    - edit_progress_bar_with_click : modifie une barre de progression en fonction d'un clic
-    - edit_progress_bar_with_ratio : modifie une barre de progression en fonction d'un pourcentage demandé
-    - maj_progress_bar : mets à jour visuellement une barre de progression
 
-    - activate_input_box : active/désactive une box de saisie (si clic dans rect ou non) et modifie simplement la chaine de caractère prévu pour sauvegardé la saisie
-    - maj_input_box : mets à jour visuellement une box de saisie
-
-    - create_button : créer un bouton avec le texte centré
-*/
 
 // Fonction qui verifie si un click est dans un rectangle, et renvoie 1 ou 0
 // Parametre : le rectangle dans lequelle on veut verifier le click
@@ -179,4 +172,109 @@ void create_button(SDL_Renderer* renderer, SDL_Rect button_rect, char text[100],
 
     SDL_FreeSurface(tmp_surface);
     SDL_DestroyTexture(text_texture);
+}
+
+
+
+
+/*//////////////////////////////////////////////    Partie pour la fenetre play en solo     ///////////////////////////////////////*/
+
+// nb de mots au total : 22 740
+
+// Va chercher le mot à la ligne demander et l'affecte dans mot
+void affect_word_from_line(FILE* file, int nb_ligne, char* mot) {
+    rewind(file);
+    char ligne[50];
+    int compteur = 0;
+    while(fgets(ligne, 50, file) != NULL && compteur < nb_ligne) {
+        compteur++;
+        if(compteur == nb_ligne) {
+            ligne[strcspn(ligne, "\n")] = '\0';
+            strcpy(mot, ligne);
+        }
+    }
+}
+
+
+// Vérifie si un mot est dans la liste ou pas -> 0 : déja dans la liste     1 : pas là
+int check_word_not_used(char** list_to_check, char* word) {
+    int not_found = 1, counter = 0;
+    while(list_to_check[counter][0] != '\0') {
+        if(strcmp(list_to_check[counter], word) == 0) {
+            not_found = 0;
+        }
+        counter++;
+    }
+    return not_found;
+}
+
+
+/* On donne en parametres :
+    - Le nb de mots qu'on doit placer
+    - La liste du joueur (qui sera directement modifié)
+    - La liste commune (idem)
+    - Un pointeur qui va être modifé pour donner le mot en commun
+ */
+void generate_list_solo(int nb_words, char** player_list, char** common_list, char* common_word, int init_list) {
+
+    FILE* file = fopen("../mots.txt", "r");
+    srand(time(NULL) ^ getpid());   // Initialisatin du générateur de nb aléatoire (pour qu'ils soient un peu + aléatoire)
+
+    // Création d'un tableau qui va comprter tout les mots déja utilisé (et son counter)
+    char* used_words[2*nb_words];
+    int counter_used_words = 0;
+
+    // Allocation de la place que néscessite le tab de STR used_words
+    for(int i=0 ; i<(2*nb_words) ; i++) {
+        used_words[i] = malloc(sizeof(char)*50);
+        used_words[i][0] = '\0';
+    }
+
+    // Si c'est la première initialisation
+    if(init_list) {
+        // Génération des 2 listes (+ enregistrement à chaque fois dans used_words) sans aucune redondance de mots
+        for(int i=0 ; i<nb_words ; i++) {
+            char player_list_word[50] = "";
+            char common_list_word[50] = "";
+            affect_word_from_line(file, rand()%22741, player_list_word);
+            affect_word_from_line(file, rand()%22741, common_list_word);
+            // Si les deux mots ne sont pas encore utilisé ET qu'ils sont différent l'un par rapport à l'autre --> ajouter dans les liste + save in used_words
+            if(check_word_not_used(used_words, player_list_word) && check_word_not_used(used_words, common_list_word) && strcmp(player_list_word, common_list_word) != 0) {
+                strcpy(used_words[counter_used_words++], player_list_word);
+                strcpy(used_words[counter_used_words++], common_list_word);
+                strcpy(player_list[i], player_list_word);
+                strcpy(common_list[i], common_list_word);
+            }
+        }
+
+        // Génération du mot en commun, puis on remplace un des mots généré avant (indice aléatoire) par ce mot commun
+        affect_word_from_line(file, rand()%22741, common_word);
+        strcpy(player_list[rand()%(nb_words)], common_word);
+        strcpy(common_list[rand()%(nb_words)], common_word);
+    }
+
+    // Sinon on met à jour par rapport à la liste joueur
+    else {
+        // Remplacement de la liste commune par l'ancienne joueur (et on mets les mots dans used_words
+        for(int i=0 ; i<nb_words ; i++) {
+            strcpy(common_list[i], player_list[i]);
+            strcpy(used_words[counter_used_words++], player_list[i]);
+        }
+        // On génère une nouvelle liste joueur en vérifiant que les mots n'ont pas déja été utilisé
+        for(int i=0 ; i<nb_words ; i++) {
+            char player_list_word[50] = "";
+            affect_word_from_line(file, rand()%22741, player_list_word);
+            if(check_word_not_used(used_words, player_list_word)) {
+                strcpy(used_words[counter_used_words++], player_list_word);
+                strcpy(player_list[i], player_list_word);
+            }
+        }
+        // Génération du mot en commun, puis on remplace un des mots généré avant (indice aléatoire) par ce mot commun
+        affect_word_from_line(file, rand()%22741, common_word);
+        strcpy(player_list[rand()%(nb_words)], common_word);
+        strcpy(common_list[rand()%(nb_words)], common_word);
+    }
+
+    // Libération de la mémoire
+    for(int i=0 ; i<(2*nb_words) ; i++) free(used_words[i]);
 }
