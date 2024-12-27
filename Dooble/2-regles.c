@@ -254,7 +254,7 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
                 if(click_in_rect(play_button)) {
                     if(nb_player >0) {
                         running = 0;
-                        *nb_window = 2;
+                        *nb_window = 3;
                         *nb_joueurs_at_end = nb_player;
                         *time_at_end = int_time_choosen;
                         *nb_words_at_end = int_words_choosen;
