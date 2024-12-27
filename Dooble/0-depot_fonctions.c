@@ -54,11 +54,11 @@ Modifie la barre de progression en fonction d'un % souhaité (ne mets pas à jou
     - Un pointeur vers le rect pour la progression (créé en amont)
     - Le % de la barre qu'on veut remplir
 */
-void edit_progress_bar_with_ratio(SDL_Rect bar, SDL_Rect* sub_bar, int ratio) {
-    if(ratio>=0 && ratio<=100) {
+void edit_progress_bar_with_ratio(SDL_Rect bar, SDL_Rect* sub_bar, float ratio) {
+    if(ratio>=0 && ratio<=1) {
         sub_bar->x = bar.x;
         sub_bar->y = bar.y;
-        sub_bar->w = (ratio*bar.w) / 100;
+        sub_bar->w = ratio*bar.w;
         sub_bar->h = bar.h;
     }
 }
@@ -214,6 +214,7 @@ int check_word_not_used(char** list_to_check, char* word) {
     - La liste du joueur (qui sera directement modifié)
     - La liste commune (idem)
     - Un pointeur qui va être modifé pour donner le mot en commun
+    - Un int pour dire si oui (1) ou non (0) il s'agit de la 1ère initialisation des listes
  */
 void generate_list_solo(int nb_words, char** player_list, char** common_list, char* common_word, int init_list) {
 
