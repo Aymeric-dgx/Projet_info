@@ -6,6 +6,13 @@ void window_menu(SDL_DisplayMode screen, int* nb_window);
 void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_end, int* time_at_end, int* nb_words_at_end, int* gamemode_at_end, char** names_player_save_at_end);
 
 
+// Fonctions pour la fenetre play
+void generate_list_solo(int nb_words, char** player_list, char** common_list, char* common_word, int init_list);
+
+
+
+
+
 // Petite fonctions utilitaires
 int click_in_rect(SDL_Rect rect);
 
