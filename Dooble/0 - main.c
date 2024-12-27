@@ -26,6 +26,7 @@ void main(){
         tmp[0] = '\0';
         names_player_save[i] = tmp;
     }
+    int score = 0;
 
     int running = 1;
 
@@ -34,9 +35,8 @@ void main(){
         if (nb_window == 0) running = 0; // Bouton Quitter cliqué --> stopper le programme
         if(nb_window == 1) window_menu(screen, &nb_window);
         if (nb_window == 2) options_window(screen, &nb_window, &nb_player, &time, &nb_words, &gamemode, names_player_save);
-        if(nb_window == 3) running = 0;
+        if(nb_window == 3) window_play_solo(screen, &nb_window, nb_words, time, &score);
     }
-
 
     TTF_Quit();
     SDL_Quit();
