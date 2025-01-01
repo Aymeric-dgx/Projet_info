@@ -398,7 +398,9 @@ void generate_list_solo(int nb_words, char** player_list, char** common_list, ch
             else i--;
         }
         // On récupère un mot de la liste commune qu'on insert dans la nouvelle liste joueur
-        strcpy(player_list[rand()%nb_words], common_list[rand()%nb_words]);
+        int index = rand()%nb_words;
+        strcpy(player_list[rand()%nb_words], common_list[index]);
+        strcpy(common_word, common_list[index]);
     }
 
     // Libération de la mémoire
