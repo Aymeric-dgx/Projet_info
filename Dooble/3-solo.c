@@ -126,6 +126,8 @@ void window_play_solo(SDL_DisplayMode screen, int* nb_window, int nb_words, int 
         if(strcmp(common_word, saved_text) == 0) {
             generate_list_solo(nb_words, player_list, common_list, common_word, 0);
             (*score)++;
+            strcpy(saved_text, "");
+            printf("%s ", common_word);
         }
 
         // Calcul + affichage temps restant
