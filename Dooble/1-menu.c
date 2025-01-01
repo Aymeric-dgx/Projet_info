@@ -61,17 +61,14 @@ void window_menu(SDL_DisplayMode screen, int* nb_window) {
 
                 if(click_in_rect(buttons[0])) {
                     running = 0;
-                    SDL_Log("Bouton 'Play' cliquer !");
                     *nb_window = 2;
                 }
                 if(click_in_rect(buttons[1])) {
                     running = 0;
-                    SDL_Log("Bouton 'Score' cliquer !");
-                    // A modifier
+                    *nb_window = 5;
                 }
                 if(click_in_rect(buttons[2])) {
                     running = 0;
-                    SDL_Log("Bouton 'Quit' cliquer !");
                     *nb_window = 0;
                 }
             }
