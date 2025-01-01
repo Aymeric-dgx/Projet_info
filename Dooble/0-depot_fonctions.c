@@ -1,4 +1,4 @@
-// Espace pour y deposer des petites fonctions qu on a fait (ne pas oublier de les déclarer dans option.h)
+// Espace pour y deposer des fonctions qu on a fait (ne pas oublier de les déclarer dans option.h)
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include "option.h"
@@ -177,7 +177,16 @@ void create_button(SDL_Renderer* renderer, SDL_Rect button_rect, char text[100],
 
 
 
-/*//////////////////////////////////////////////    Partie pour la fenetre play en solo     ///////////////////////////////////////*/
+
+
+
+
+
+
+
+
+/*//////////////////////////////////////////////    Partie pour la génération des listes     ////////////////////////////////////////////////////////////////////////////*/
+
 
 // nb de mots au total : 22 740
 
@@ -196,6 +205,7 @@ void affect_word_from_line(FILE* file, int nb_ligne, char* mot) {
 }
 
 
+
 // Vérifie si un mot est dans la liste ou pas -> 0 : déja dans la liste     1 : pas là
 int check_word_not_used(char** list_to_check, char* word) {
     int not_found = 1, counter = 0;
@@ -207,6 +217,119 @@ int check_word_not_used(char** list_to_check, char* word) {
     }
     return not_found;
 }
+
+
+
+// Mélange les liste (conçue pour multi)
+void mix_listes(char*** all_player_list, char** common_list, int nb_player, int nb_words) {
+    char tmp_list[nb_words][50];
+    int index_used[nb_words];
+    for(int i=0 ; i<nb_words ; i++) index_used[i] = -1;
+    int count = 0;
+
+    // On mélange la liste commune
+    for(int i=0 ; i<nb_words ; i++) {
+        strcpy(tmp_list[i], common_list[i]);
+    }
+    while(count<nb_words) {
+        int index = rand()%nb_words;
+        if(index_used[index] == -1) {
+            strcpy(common_list[index], tmp_list[count++]);
+            index_used[index] = 0;
+        }
+    }
+    // On mélange les listes joueurs
+    for(int i=0 ; i<nb_player ; i++) {
+        count = 0;
+        for(int j=0 ; j<nb_words ; j++) {
+            index_used[j] = -1;
+            strcpy(tmp_list[j], all_player_list[i][j]);
+        }
+        while(count<nb_words) {
+            int index = rand()%nb_words;
+            if(index_used[index] == -1) {
+                strcpy(all_player_list[i][index], tmp_list[count++]);
+                index_used[index] = 0;
+            }
+        }
+    }
+}
+
+
+
+
+// Fonction qui vérifie si le mot est répété plusieurs fois dans une liste (utilisé pour set_new_player_list pour le mode multi)
+
+int check_word_not_repeat(int nb_words, int nb_player, char all_words[150][50], char* word) {
+    int word_valid = 1;
+    for(int i=0 ; i<(nb_player+1)*nb_words ; i++) {
+        int nb_of_repeat = 0;
+        for(int j=i ; j<(nb_player+1)*nb_words ; j++) {
+            if(strcmp(word, all_words[j]) == 0) nb_of_repeat++;
+        }
+        if(nb_of_repeat>1) word_valid = 0;
+    }
+    return word_valid;
+}
+
+
+
+// Fonction pour créer la nouvelle liste du joueur gagnant (pour multi) à partir des autres listes et de la nouvelle commune (qui est donc celle du gagnant)
+
+void set_new_player_list(int nb_words, int nb_player, char*** all_player_list, int winning_player) {
+    FILE* file = fopen("../mots.txt", "r");
+
+    char tmp_new_list[nb_words][50];
+
+    // Afin d'ajouter un mot "unique", on va mettre tout les mots ensemble, puis on vérifiera si le mot apparait ou non plusieurs fois
+    char all_words[nb_player*nb_words+1][50];
+    int counter_all_words = 0;
+
+    // On copie les liste des joueur à l'interieur (qui comprendra donc aussi la nouvelle liste commune -> joueur gagnant)
+    for(int i=0 ; i<nb_player ; i++) {
+        for(int j=0 ; j<nb_words ; j++) {
+            strcpy(all_words[counter_all_words++], all_player_list[i][j]);
+        }
+    }
+
+
+    // Maintenant on va ajouter un mots de chaque liste (et donc aussi la commune) dans la nouvelle, en vérifiant qu'il est "unique"
+
+    for(int i=0 ; i<nb_player ; i++) {
+        int index_in_list = rand()%nb_words;
+        while(!check_word_not_repeat(nb_words, nb_player, all_words, all_player_list[i][index_in_list])) {
+            index_in_list = rand()%nb_words;
+        }
+        strcpy(tmp_new_list[i], all_player_list[i][index_in_list]);
+    }
+
+
+
+    // Et puis on complète le reste de la liste avec des mots qui n'ont pas encore été utilisé
+    for(int i=nb_player ; i<nb_words ; i++) {
+        char new_word[50];
+        int word_valid = 1;
+        affect_word_from_line(file, rand()%22741, new_word);
+        for(int j=0 ; j<nb_player*nb_words ; j++) {
+            if(strcmp(all_words[j], new_word) == 0) word_valid = 0;
+        }
+        if(word_valid) strcpy(tmp_new_list[i], new_word);
+        else i--;
+    }
+
+    // Enfin, on copie la tmp_new_list dans la liste du joueur gagnant
+    for(int i=0 ; i<nb_words ; i++) {
+        strcpy(all_player_list[winning_player][i], tmp_new_list[i]);
+    }
+}
+
+
+
+
+
+
+
+
 
 
 /* On donne en parametres :
@@ -221,7 +344,7 @@ void generate_list_solo(int nb_words, char** player_list, char** common_list, ch
     FILE* file = fopen("../mots.txt", "r");
     srand(time(NULL) ^ getpid());   // Initialisatin du générateur de nb aléatoire (pour qu'ils soient un peu + aléatoire)
 
-    // Création d'un tableau qui va comprter tout les mots déja utilisé (et son counter)
+    // Création d'un tableau qui va comporter tout les mots déja utilisé (et son counter)
     char* used_words[2*nb_words];
     int counter_used_words = 0;
 
@@ -246,6 +369,8 @@ void generate_list_solo(int nb_words, char** player_list, char** common_list, ch
                 strcpy(player_list[i], player_list_word);
                 strcpy(common_list[i], common_list_word);
             }
+            // Si on a pas pu affecter un nouveau mot, on "recommence"
+            else i--;
         }
 
         // Génération du mot en commun, puis on remplace un des mots généré avant (indice aléatoire) par ce mot commun
@@ -269,6 +394,8 @@ void generate_list_solo(int nb_words, char** player_list, char** common_list, ch
                 strcpy(used_words[counter_used_words++], player_list_word);
                 strcpy(player_list[i], player_list_word);
             }
+            // Si on a pas pu affecter un nouveau mot, on "recommence"
+            else i--;
         }
         // Génération du mot en commun, puis on remplace un des mots généré avant (indice aléatoire) par ce mot commun
         affect_word_from_line(file, rand()%22741, common_word);
@@ -279,3 +406,93 @@ void generate_list_solo(int nb_words, char** player_list, char** common_list, ch
     // Libération de la mémoire
     for(int i=0 ; i<(2*nb_words) ; i++) free(used_words[i]);
 }
+
+
+
+
+
+/*
+On donne en parametre :
+    - le nb de mots
+    - le nb de joueur
+    - la liste comprtant toute les listes des joueurs
+    - la liste commune
+    - si oui (1) ou non (0) il s'agit de la première initilaistion des listes
+    - Si on met juste à jour, indiquer le numéro du joueur gagnant
+ */
+
+
+void generate_list_multi(int nb_words, int nb_player, char*** all_player_list, char** common_list, int init, int winning_player) {
+    FILE* file = fopen("../mots.txt", "r");
+    srand(time(NULL) ^ getpid());   // Initialisatin du générateur de nb aléatoire (pour qu'ils soient un peu + aléatoire)
+
+    if(init) {
+        // Création d'un tab contenant tout les mots utilisés
+        char* used_words[nb_words*(nb_player+1)];
+        for(int i=0 ; i<nb_words*(nb_player+1) ; i++) {
+            used_words[i] = malloc(sizeof(char)*50);
+            used_words[i][0] = '\0';
+        }
+        int counter_used_words = 0;
+
+
+        // Génération de toute les listes, d'abord sans aucun mots en commun
+
+        // Génération de la liste commune
+        for(int i=0 ; i<nb_words ; i++) {
+            char common_list_word[50] = "";
+            affect_word_from_line(file, rand()%22741, common_list_word);
+            if(check_word_not_used(used_words, common_list_word)) {
+                strcpy(used_words[counter_used_words++], common_list_word);
+                strcpy(common_list[i], common_list_word);
+            }
+            // Si on a pas pu affecter un nouveau mot, on "recommence"
+            else i--;
+        }
+
+        // Génération des listes des joueurs
+        for(int i=0 ; i<nb_player ; i++) {
+            for(int j=0 ; j<nb_words ; j++) {
+                char player_word[50] = "";
+                affect_word_from_line(file, rand()%22741, player_word);
+                if(check_word_not_used(used_words, player_word)) {
+                    strcpy(all_player_list[i][j], player_word);
+                    strcpy(used_words[counter_used_words++], player_word);
+                }
+                else j--;
+            }
+        }
+
+
+        // On va placer les mots en commun
+
+        // On commence avec la liste commune
+        for(int i=0 ; i<nb_player ; i++) {
+            strcpy(all_player_list[i][0], common_list[i]);
+        }
+
+        // On continue avec toute les listes
+        int index = 1;
+        for(int i=0 ; i<nb_player ; i++) {
+            for(int j=i+1 ; j<nb_player ; j++) {
+                strcpy(all_player_list[j][index], all_player_list[i][index++]);
+            }
+            index=1;
+        }
+
+        // On mélange les listes
+        mix_listes(all_player_list, common_list, nb_player, nb_words);
+    }
+
+    // S'il s'agit juste d'une mise à jour suite à une victoire
+    else {
+
+        // On copie la liste du joueur gagnant dans la liste commune
+        for(int i=0 ; i<nb_words ; i++) {
+            strcpy(common_list[i], all_player_list[winning_player][i]);
+        }
+
+        // Pour la nouvelle liste, on sélectionne 1 mot de chaque liste (dont donc la nouvelle commune) qui n'est dans aucune autre liste, qui est "unique"
+        set_new_player_list(nb_words, nb_player, all_player_list, winning_player);
+        }
+    }
