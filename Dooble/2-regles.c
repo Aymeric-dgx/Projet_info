@@ -51,7 +51,6 @@ void maj_list_player(SDL_Renderer* renderer, SDL_DisplayMode screen, SDL_Rect re
     sprintf(tmp, "%d", nb_player);  // Convertit le nb_player en char, puis l'ajoute dans tmp
     strcat(title, tmp);
     create_button(renderer, title_name_list, title, small_font, white_color, background_color);
-
     // Affichage noms joueurs + croix pour delete en fonction du nb de joueur + nb joueur (J1, J2, ...)
     if(nb_player>0) {
         for(int i=0 ; i<nb_player ; i++) {
@@ -140,6 +139,7 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
     TTF_Font* big_font = TTF_OpenFont("../police/arial.ttf", screen.w/15);      // Police grande taille pour titre
     TTF_Font* medium_font = TTF_OpenFont("../police/arial.ttf", screen.w/35);   // Police taille moyenne pour section ("Mode de jeu", "Temps de jeu", ...)
     TTF_Font* small_font = TTF_OpenFont("../police/arial.ttf", screen.w/60);    // Police taille petite pour détails ("Solo", "Multi", noms des joueurs dans la liste si multi, ...)
+    TTF_Font* very_small_font = TTF_OpenFont("../police/arial.ttf", screen.w/120);    // Police taille petite pour détails ("Solo", "Multi", noms des joueurs dans la liste si multi, ...)
 
 
     // Création des structures à modfifier / utiliser dans le main
@@ -152,6 +152,7 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
         checkbox_mode[i].y = screen.h/3.3;
     }
     SDL_Rect name_input_box = {screen.w/10,screen.h/2.2,screen.w/5,screen.h/15};
+    SDL_Rect rule_nb_player_rect = {screen.w/6, screen.h/2.3, screen.w/20, screen.h/150};
     SDL_Rect* rects_name_list = malloc(sizeof(SDL_Rect)*15);
     for(int i=0 ; i<15 ; i++) {
         rects_name_list[i].x = screen.w/1.2;
@@ -254,12 +255,13 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
                 if(click_in_rect(play_button)) {
                     if(nb_player >0) {
                         running = 0;
-                        *nb_window = 3;
                         *nb_joueurs_at_end = nb_player;
                         *time_at_end = int_time_choosen;
                         *nb_words_at_end = int_words_choosen;
                         *gamemode_at_end = multi_activated;
                         for(int i=0 ; i<nb_player ; i++) names_player_save_at_end[i] = names_player_save[i];
+                        if(multi_activated) *nb_window = 4;
+                        else *nb_window = 3;
                     }
                 }
                 // Si bouton Menu cliqué, simplement retourner au menu
@@ -271,15 +273,17 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
             // Activation input_box pour time
             activate_time_input_box(event, &input_box_time_active, input_time_select, save_time_select, time_input_box);
             if(input_box_time_active) time_bar_clicked = 0;
-            // Activation input_box pour time
+            // Activation input_box pour nb_words
             activate_words_input_box(event, &input_box_words_active, input_words_select, save_words_select, words_input_box);
             if(input_box_words_active) words_bar_clicked = 0;
 
             // Activation saisie nom joueur + detection si nouveau nom validé ou pas
-            char tmp[50];
-            strcpy(tmp, names_player_save[nb_player]);
-            activate_input_box(event, &input_box_enter_name_active, name_in_progress, names_player_save[nb_player], name_input_box);
-            if(strcmp(tmp, names_player_save[nb_player]) != 0) nb_player++;     // Si l'ancien nom saved à été modifié -> nouvelle entrée de nom -> nb_player ++
+            if(nb_player<4) {
+                char tmp[50];
+                strcpy(tmp, names_player_save[nb_player]);
+                activate_input_box(event, &input_box_enter_name_active, name_in_progress, names_player_save[nb_player], name_input_box);
+                if(strcmp(tmp, names_player_save[nb_player]) != 0) nb_player++;     // Si l'ancien nom saved à été modifié -> nouvelle entrée de nom -> nb_player ++
+            }
         }
         // Fin gestion évenements
 
@@ -295,6 +299,7 @@ void options_window(SDL_DisplayMode screen, int* nb_window, int* nb_joueurs_at_e
 
         // Maj de la zone de saisie nom + mode de jeu
         maj_gamemode_zone(renderer_regles, screen, checkbox_mode, name_input_box, name_in_progress, medium_font, small_font, background_color, multi_activated);
+        create_button(renderer_regles, rule_nb_player_rect, "Rentrez entre 1 et 4 noms de joueurs", very_small_font, white_color, background_color);
 
         // Maj de la liste des joueurs
         maj_delete_player(&nb_player_to_delete, &nb_player, names_player_save);
