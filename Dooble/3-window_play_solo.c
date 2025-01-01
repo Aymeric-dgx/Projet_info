@@ -49,7 +49,7 @@ void window_play_solo(SDL_DisplayMode screen, int* nb_window, int nb_words, int 
 
     // Création des strucutres
     SDL_Rect big_rect_common_list = {screen.w/4,screen.h/3,screen.w/2,screen.h/7};
-    SDL_Rect big_rect_player_list = {screen.w/6,screen.h/1.4,2*screen.w/3,screen.h/10};
+    SDL_Rect big_rect_player_list = {screen.w/8,screen.h/1.4,3*screen.w/4,screen.h/10};
     SDL_Rect title_common_list_rect = {screen.w/2-screen.w/20, screen.h/3.5, screen.w/10, screen.h/25};
     SDL_Rect title_player_list_rect = {screen.w/2-screen.w/20, screen.h/1.5, screen.w/10, screen.h/25};
 
@@ -128,7 +128,7 @@ void window_play_solo(SDL_DisplayMode screen, int* nb_window, int nb_words, int 
             (*score)++;
         }
 
-        // Calcul + afficahge temps restant
+        // Calcul + affichage temps restant
         time_t current_time = time(NULL);
         remaining_time = play_time - (current_time - time_at_start);
         float f_remaining_time = remaining_time, f_play_time = play_time;
@@ -159,7 +159,7 @@ void window_play_solo(SDL_DisplayMode screen, int* nb_window, int nb_words, int 
         create_button(renderer, input_title_rect, "Entrez le mot en commun ci-dessous (en majuscules)", very_small_font, white_color, background_color);
 
         // Affichage du score à coté de l'input_box
-        sprintf(s_score, "%d points", *score);
+        sprintf(s_score, "%d point(s)", *score);
         create_button(renderer, score_display, s_score, small_font, white_color, background_color);
 
         // Si temps écoulé, montrer une image de fin, et après un certain temps arrêter le programme
@@ -173,7 +173,7 @@ void window_play_solo(SDL_DisplayMode screen, int* nb_window, int nb_words, int 
             create_button(renderer, final_rect1, "Jeu termine, felicitations !!!", big_font, black_color, white_color);
             create_button(renderer, final_rect2, final_text, big_font, black_color, white_color);
             if(remaining_time == -5) running = 0;
-            *nb_window = 0;
+            *nb_window = 1;
         }
 
 
@@ -193,4 +193,8 @@ void window_play_solo(SDL_DisplayMode screen, int* nb_window, int nb_words, int 
 
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+    TTF_CloseFont(big_font);
+    TTF_CloseFont(medium_font);
+    TTF_CloseFont(small_font);
+    TTF_CloseFont(very_small_font);
 }
