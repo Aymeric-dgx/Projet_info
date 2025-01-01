@@ -381,7 +381,7 @@ void generate_list_solo(int nb_words, char** player_list, char** common_list, ch
 
     // Sinon on met à jour par rapport à la liste joueur
     else {
-        // Remplacement de la liste commune par l'ancienne joueur (et on mets les mots dans used_words
+        // Remplacement de la liste commune par l'ancienne joueur (et on mets les mots dans used_words)
         for(int i=0 ; i<nb_words ; i++) {
             strcpy(common_list[i], player_list[i]);
             strcpy(used_words[counter_used_words++], player_list[i]);
@@ -397,10 +397,8 @@ void generate_list_solo(int nb_words, char** player_list, char** common_list, ch
             // Si on a pas pu affecter un nouveau mot, on "recommence"
             else i--;
         }
-        // Génération du mot en commun, puis on remplace un des mots généré avant (indice aléatoire) par ce mot commun
-        affect_word_from_line(file, rand()%22741, common_word);
-        strcpy(player_list[rand()%(nb_words)], common_word);
-        strcpy(common_list[rand()%(nb_words)], common_word);
+        // On récupère un mot de la liste commune qu'on insert dans la nouvelle liste joueur
+        strcpy(player_list[rand()%nb_words], common_list[rand()%nb_words]);
     }
 
     // Libération de la mémoire
