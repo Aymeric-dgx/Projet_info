@@ -44,7 +44,7 @@ void window_play_solo(SDL_DisplayMode screen, int* nb_window, int nb_words, int 
     TTF_Font* big_font = TTF_OpenFont("../police/arial.ttf", screen.w/15);      // Police grande taille pour titre
     TTF_Font* medium_font = TTF_OpenFont("../police/arial.ttf", screen.w/35);   // Police taille moyenne pour section ("Mode de jeu", "Temps de jeu", ...)
     TTF_Font* small_font = TTF_OpenFont("../police/arial.ttf", screen.w/60);    // Police taille petite pour détails ("Solo", "Multi", noms des joueurs dans la liste si multi, ...)
-    TTF_Font* very_small_font = TTF_OpenFont("../police/arial.ttf", screen.w/100);    // Police taille petite pour détails ("Solo", "Multi", noms des joueurs dans la liste si multi, ...)
+    TTF_Font* very_small_font = TTF_OpenFont("../police/arial.ttf", screen.w/90);    // Police taille petite pour détails ("Solo", "Multi", noms des joueurs dans la liste si multi, ...)
 
 
     // Création des strucutres
@@ -146,8 +146,8 @@ void window_play_solo(SDL_DisplayMode screen, int* nb_window, int nb_words, int 
         for(int i=0 ; i<nb_words ; i++) {
             SDL_Rect tmp_common_rect = {pos_rect_common_list[i][0], pos_rect_common_list[i][1], pos_rect_common_list[i][2], pos_rect_common_list[i][3]};
             SDL_Rect tmp_player_rect = {pos_player_list[i][0], pos_player_list[i][1], pos_player_list[i][2], pos_player_list[i][3]};
-            create_button(renderer, tmp_common_rect, common_list[i], very_small_font, white_color, background_color);
-            create_button(renderer, tmp_player_rect, player_list[i], very_small_font, white_color, background_color);
+            create_button(renderer, tmp_common_rect, common_list[i], very_small_font, black_color, white_color);
+            create_button(renderer, tmp_player_rect, player_list[i], very_small_font, black_color, white_color);
             // Dessin des contours en blanc
             SDL_SetRenderDrawColor(renderer, 255,255,255,255);
             SDL_RenderDrawRect(renderer, &tmp_player_rect);
