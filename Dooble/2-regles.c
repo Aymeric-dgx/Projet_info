@@ -27,8 +27,8 @@ void maj_gamemode_zone(SDL_Renderer* renderer, SDL_DisplayMode screen, SDL_Rect 
         SDL_SetRenderDrawColor(renderer, 0,0,0,255);
         SDL_RenderFillRect(renderer, &checkbox[0]);
     }
-    // Création + maj texte "Solo" et "Multijoueurs"
-    char* mode_names[2] = {"Solo", "Multijoueurs"};
+    // Création + maj texte "Solo" et "Multijoueur"
+    char* mode_names[2] = {"Solo", "Multijoueur"};
     for(int i=0 ; i<2 ; i++) {
         SDL_Rect text_rect = {checkbox[i].x + screen.w/30 + i*screen.w/35, checkbox[i].y, checkbox[i].w, checkbox[i].h};
         create_button(renderer, text_rect, mode_names[i], small_font, white_color, background_color);
