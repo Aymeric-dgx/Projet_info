@@ -463,7 +463,6 @@ void generate_list_multi(int nb_words, int nb_player, char*** all_player_list, c
             }
         }
 
-
         // On va placer les mots en commun
 
         // On commence avec la liste commune
@@ -477,7 +476,7 @@ void generate_list_multi(int nb_words, int nb_player, char*** all_player_list, c
             for(int j=i+1 ; j<nb_player ; j++) {
                 strcpy(all_player_list[j][index], all_player_list[i][index++]);
             }
-            index=1;
+            index=i+1;
         }
 
         // On mélange les listes
