@@ -90,7 +90,7 @@ void window_scores(SDL_DisplayMode screen, int* nb_window) {
     SDL_Rect go_back_menu_rect = {0, 0, screen.w/6, screen.h/10};
     SDL_Rect reset_rect = {3*screen.w / 4, screen.h/10, screen.w/6, screen.h/12};
     SDL_Rect bar = {3*screen.w / 3.75, screen.h/4, screen.w/6, screen.h/15};
-    SDL_Rect ratio_text = {3*screen.w / 3.75, screen.h/3.75, 20, 25};
+    SDL_Rect ratio_text = {(screen.w / 8)*7, screen.h/2.75, 0, 0};
     SDL_Rect sub_bar = {3*screen.w / 3.75, screen.h/4, screen.w/6, screen.h/15};
     SDL_Rect* p_sub_bar = &sub_bar;
 
@@ -143,6 +143,8 @@ void window_scores(SDL_DisplayMode screen, int* nb_window) {
                 }
                 if(click_in_rect(reset_rect)) {
                     saved_text[0] = "\0";
+                    ratio = 1;
+                    edit_progress_bar_with_ratio(bar, p_sub_bar, ratio);
                 }
                 if(click_in_rect(bar)) {
                     edit_progress_bar_with_click(bar, p_sub_bar, &ratio);
@@ -163,7 +165,9 @@ void window_scores(SDL_DisplayMode screen, int* nb_window) {
 
         maj_input_box(renderer, text_box, box_color, input_text, font, font_color);
 
-        int grille = ratio*8;
+        int grille = round(ratio*8);
+        char grille_c[2];
+        sprintf(grille_c,"%d",grille);
 
 
         int nb_j_rechercher;
@@ -172,11 +176,11 @@ void window_scores(SDL_DisplayMode screen, int* nb_window) {
             if (scores != NULL && joueurs != NULL) {
                 for (int j = 0; j < grille; j++) {
                     // création de la première colonne avec les pseudos
-                    SDL_Rect button_rect1 = {screen.w / 2 + 2.5, screen.h/4 + j * (int)round(screen.h/10) + j , screen.w/3.5, screen.h/10};
+                    SDL_Rect button_rect1 = {screen.w / 2 + 2.5, screen.h/4 + j * (int)round(screen.h/11) + j , screen.w/3.5, screen.h/11};
                     create_button(renderer, button_rect1, scores[j], font, font_color_r, button_rect_color);
 
                     // création de la seconde colonne avec les scores
-                    SDL_Rect button_rect2 = {screen.w/2 - screen.w/3.5 + 2.5, screen.h/4 + j * (int)round(screen.h/10) + j , screen.w/3.5, screen.h/10};
+                    SDL_Rect button_rect2 = {screen.w/2 - screen.w/3.5 + 2.5, screen.h/4 + j * (int)round(screen.h/11) + j , screen.w/3.5, screen.h/11};
                     create_button(renderer, button_rect2, joueurs[j], font, font_color_r, button_rect_color);
                 }
             }
@@ -186,17 +190,18 @@ void window_scores(SDL_DisplayMode screen, int* nb_window) {
                 for (int k = 0; k < grille; k++) {
 
                     // création de la première colonne avec les pseudos
-                    SDL_Rect button_rect1 = {screen.w / 2 + 2.5, screen.h/4 + k * (int)round(screen.h/10) + k , screen.w/3.5, screen.h/10};
+                    SDL_Rect button_rect1 = {screen.w / 2 + 2.5, screen.h/4 + k * (int)round(screen.h/11) + k , screen.w/3.5, screen.h/11};
                     create_button(renderer, button_rect1, scores_j_rechercher[k], font, font_color_r, button_rect_color);
 
                     // création de la seconde colonne avec les scores
-                    SDL_Rect button_rect2 = {screen.w/2 - screen.w/3.5 + 2.5, screen.h/4 + k * (int)round(screen.h/10) + k , screen.w/3.5, screen.h/10};
+                    SDL_Rect button_rect2 = {screen.w/2 - screen.w/3.5 + 2.5, screen.h/4 + k * (int)round(screen.h/11) + k , screen.w/3.5, screen.h/11};
                     create_button(renderer, button_rect2, joueurs_rechercher[k], font, font_color_r, button_rect_color);
                 }
             }
         }
         create_button(renderer, go_back_menu_rect, "Menu", font, font_color_r, button_rect_color);
         create_button(renderer,reset_rect, "Reset", font, font_color_r, button_rect_color);
+        create_button(renderer, ratio_text,grille_c , font, font_color_r, button_rect_color);
 
         // Si on veut remplir la barre de progression à 82% :
         //edit_progress_bar_with_ratio(bar, p_sub_bar, 82);
