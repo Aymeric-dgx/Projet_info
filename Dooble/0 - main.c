@@ -23,12 +23,14 @@ void main(){
     int time;
     int gamemode;
     int nb_words;
-    char** names_player_save = malloc(sizeof(char*)*15);
-    for(int i=0 ; i<15 ; i++) {
+    
+    char** names_player_save = malloc(sizeof(char*)*4);
+    for(int i=0 ; i<4 ; i++) {
         char* tmp = malloc(sizeof(char)*50);
         tmp[0] = '\0';
         names_player_save[i] = tmp;
     }
+    
     int* scores = malloc(sizeof(int)*4);
     for(int i=0 ; i<4 ; i++) {
         scores[i] = 0;
